@@ -29,13 +29,22 @@ plot_predictions <- function(ts, future, predictions, sdp = TRUE) {
 
   # check predictions parameter
   if (!is.list(predictions))
-    stop("predictions parameter should be a named list with the different forecasts")
-  if (any(names(predictions) == ""))
-    stop("all the elements in the list predictions should have a name")
+    stop("Predictions parameter should be a named list with the different forecasts")
+  if (is.null(names(predictions)) || any(names(predictions) == ""))
+    stop("All the elements in the list predictions should have a name")
 
-  # habría que comprobar cada predicción
+  for (ind in seq_along(predictions)) {
+    if(! (stats::is.ts(predictions[[ind]]) || is.numeric(predictions[[ind]]) ||
+          is.integer(predictions[[ind]]))) {
+      msg <- paste("Forecast", names(predictions)[ind],
+                   "should be a numeric vector or an object of class ts")
+      stop(msg)
+    }
+  }
 
-  #check_vector_ts(prediction, "prediction") # check prediction parameter
+  # check sdp parameter
+  if(! is.logical(sdp))
+    stop("Parameter sdp should be a logical value")
 
   df <- data.frame(
     x = as.vector(stats::time(ts)),
