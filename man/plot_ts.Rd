@@ -41,6 +41,10 @@ The ggplot object representing the time series and its forecast.
 A ggplot object associated with the time series (and, optionally, its future
 values, prediction and prediction intervals) is created and plotted.
 }
+\details{
+If \code{future} or \code{prediction} are vectors then they are supposed to
+start after the time series.
+}
 \examples{
 library(ggplot2)
 plot_ts(USAccDeaths) # plot a time series
@@ -65,5 +69,5 @@ t <- ts(rnorm(40, 0, 3)) # time series
 p <- rep(mean(t), 6)     # prediction
 upi <- p + qnorm(0.975)*sd(t)
 lpi <- p - qnorm(0.975)*sd(t)
-plot_ts(t, prediction = rep(mean(t), 6), upi = upi, lpi = lpi)
+plot_ts(t, prediction = rep(mean(t), 6), upi = upi, lpi = lpi, level = 0.9)
 }

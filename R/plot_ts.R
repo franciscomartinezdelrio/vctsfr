@@ -3,6 +3,9 @@
 #' A ggplot object associated with the time series (and, optionally, its future
 #' values, prediction and prediction intervals) is created and plotted.
 #'
+#' If \code{future} or \code{prediction} are vectors then they are supposed to
+#' start after the time series.
+#'
 #' @param ts a time series of class \code{ts}.
 #' @param future NULL (default) or a time series of class \code{ts} or a vector.
 #'   Future values of the time series.
@@ -43,7 +46,7 @@
 #' p <- rep(mean(t), 6)     # prediction
 #' upi <- p + qnorm(0.975)*sd(t)
 #' lpi <- p - qnorm(0.975)*sd(t)
-#' plot_ts(t, prediction = rep(mean(t), 6), upi = upi, lpi = lpi)
+#' plot_ts(t, prediction = rep(mean(t), 6), upi = upi, lpi = lpi, level = 0.9)
 plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL, level = NULL, sdp = TRUE) {
   # check ts parameter
   if(! stats::is.ts(ts))
