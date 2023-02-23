@@ -24,19 +24,20 @@ collection. Apart from the time series, future values and forecasts for the
 future values form part of the ggplot object.
 }
 \details{
-The \code{collection} parameter must be a list. Each component of the list
-stores a time series, its future values and its forecasts. Each component
-should have the following fields with the same names and in the same order:
+The \code{collection} parameter must be a list. Each component of the list stores
+a time series, its future values and its forecasts. Each component should
+have the following fields with the same names and in the same order:
 \itemize{
 \item Historical: an object of class \code{ts} with the historical
 values of the time series.
 \item Future: a vector or object of class \code{ts} with the future values to be predicted.
 \item Forecasts: a named list. Each component contains a vector or
-object of class \code{ts} with a forecast for the future values of the
-series.
+object of class \code{ts} with a forecast for the future values of the series.
 }
 
 In the example section you can see an example of a collection of time series.
+If the \code{collection} parameter is not specified correctly a proper message is
+shown.
 }
 \examples{
 c <- list(

@@ -5,18 +5,19 @@
 #' collection. Apart from the time series, future values and forecasts for the
 #' future values form part of the ggplot object.
 #'
-#' The `collection` parameter must be a list. Each component of the list
-#' stores a time series, its future values and its forecasts. Each component
-#' should have the following fields with the same names and in the same order:
+#' The `collection` parameter must be a list. Each component of the list stores
+#' a time series, its future values and its forecasts. Each component should
+#' have the following fields with the same names and in the same order:
 #'
 #' * Historical: an object of class `ts` with the historical
 #' values of the time series.
 #' * Future: a vector or object of class `ts` with the future values to be predicted.
 #' * Forecasts: a named list. Each component contains a vector or
-#'  object of class `ts` with a forecast for the future values of the
-#'  series.
+#' object of class `ts` with a forecast for the future values of the series.
 #'
 #' In the example section you can see an example of a collection of time series.
+#' If the `collection` parameter is not specified correctly a proper message is
+#' shown.
 #'
 #' @param collection a list with the collection of time series. See details.
 #' @param number an integer. The number of the time series. It should be a value
@@ -45,14 +46,9 @@
 #' plot_collection(c, 2)
 plot_collection <- function(collection, number, sdp = TRUE) {
   # check collection parameter
-  if (!is.list((collection)))
-    stop("collection parameter should be a list")
-  for (ind in seq_along(collection)) {
-    r <- check_element(collection[[ind]])
-    if (r != "OK") {
-      stop(paste("Element", ind, "of collection:", r))
-    }
-  }
+  r <- check_time_series_collection(collection)
+  if (r != "OK")
+    stop(paste("Error in 'collection' parameter:", r))
 
   # Check number parameter
   if (! (is.numeric(number) && number >= 1 && number <= length(collection)))
@@ -68,37 +64,63 @@ plot_collection <- function(collection, number, sdp = TRUE) {
   )
 }
 
+check_time_series_collection <- function(collection) {
+  if (!is.list((collection)))
+    return("A time series collection should be a list")
+  for (ind in seq_along(collection)) {
+    r <- check_element(collection[[ind]], ind)
+    if (r != "OK")
+      return(r)
+  }
+  return("OK")
+}
+
 # Check one of the elements of a collection of series and forecasts
-check_element <- function(e) {
+check_element <- function(e, index) {
   if (!is.list(e))
-    return("It is not a list")
+    return(paste0("Component [[", index, "]] of collection should be a list"))
   if (length(e) != 3)
-    return("The number of components is not 3")
+    return(paste0("Component [[", index,
+                  "]] of collection should have 3 components. Currently it has ", length(e),
+                  " components")
+    )
   if (is.null(names(e)))
-    return("The components have no names")
+    return(paste0("The components of component [[", index, "]] of collection have no names"))
 
   # Historical values
-  if (is.null(names(e)[1]) || names(e)[1] != "Historical")
-    return("The name of the first component is not 'Historical'")
+  if (is.null(names(e)[1]) || names(e)[1] != "Historical") {
+    if (names(e)[1] == "")
+      return(paste0("The first component of component [[", index, "]] of collection has no name and it should be 'Historical'"))
+    else
+      return(paste0("The name of the first component of component [[", index, "]] of collection should be 'Historical', not '", names(e[1]), "'"))
+  }
   if(! stats::is.ts(e$Historical))
-    return("The Historical component should be of class ts")
+    return(paste0("The Historical component of component [[", index, "]] of collection should be of class ts"))
 
   # Future values
-  if (is.null(names(e)[2]) || names(e)[2] != "Future")
-    return("The name of the second component is not 'Future'")
+  if (is.null(names(e)[2]) || names(e)[2] != "Future") {
+    if (names(e)[2] == "")
+      return(paste0("The first component of component [[", index, "]] of collection has no name and it should be 'Future'"))
+    else
+      return(paste0("The name of the first component of component [[", index, "]] of collection should be 'Future', not '", names(e[2]), "'"))
+  }
   if(! (stats::is.ts(e$Future) || is.numeric(e$Future) || is.integer(e$Future)))
-    return("The Future component should be an object of class ts or a vector")
+    return(paste0("The Future component of component [[", index, "]] of collection should be an object of class ts or a vector"))
 
   # Forecasts values
-  if (is.null(names(e)[3]) || names(e)[3] != "Forecasts")
-    return("The name of the third component is not 'Forecasts'")
+  if (is.null(names(e)[3]) || names(e)[3] != "Forecasts") {
+    if (names(e)[3] == "")
+      return(paste0("The first component of component [[", index, "]] of collection has no name and it should be 'Forecasts'"))
+    else
+      return(paste0("The name of the first component of component [[", index, "]] of collection should be 'Forecasts', not '", names(e[3]), "'"))
+  }
   if (!is.list(e$Forecast))
-    return("The 'Forecasts' component should be a list")
+    return(paste0("The 'Forecasts' component of component [[", index, "]] of collection should be a list"))
   if (is.null(names(e$Forecasts)) || any(names(e$Forecasts) == ""))
-    return("All the component of list 'Forecast' should have a name")
+    return(paste0("All the components of component 'Forecasts' of component [[", index, "]] of collection should have a name"))
   for (f in e$Forecasts) {
     if(! (stats::is.ts(f) || is.numeric(f) || is.integer(f)))
-      return("Each forecast should be an object of class ts or a vector")
+      return(paste0("Each forecast of component [[", index, "]] should be an object of class ts or a vector"))
   }
   return("OK")
 }
