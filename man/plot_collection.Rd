@@ -36,7 +36,7 @@ object of class \code{ts} with a forecast for the future values of the series.
 }
 
 In the example section you can see an example of a collection of time series.
-If the \code{collection} parameter is not specified correctly a proper message is
+If the \code{collection} parameter is not specified correctly, a proper message is
 shown.
 }
 \examples{

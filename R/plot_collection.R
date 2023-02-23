@@ -16,7 +16,7 @@
 #' object of class `ts` with a forecast for the future values of the series.
 #'
 #' In the example section you can see an example of a collection of time series.
-#' If the `collection` parameter is not specified correctly a proper message is
+#' If the `collection` parameter is not specified correctly, a proper message is
 #' shown.
 #'
 #' @param collection a list with the collection of time series. See details.
@@ -64,6 +64,36 @@ plot_collection <- function(collection, number, sdp = TRUE) {
   )
 }
 
+#' Check that a collection of time series is properly formatted
+#'
+#' This function checks that an object holding a collection of time series,
+#' their future values and their forecasts has the correct format. This kind of
+#' objects are used in function [plot_collection].
+#'
+#' @param collection a list representing a collection of time series as
+#'   described in [plot_collection].
+#'
+#' @return a character string with value `"OK"` if the object is properly
+#'   formatted. Otherwise, the character string indicates the first error found
+#'   in the object format.
+#' @export
+#'
+#' @examples
+#' c <- list(
+#'    list(Historical = window(USAccDeaths, end = c(1977, 12)),
+#'         Future = window(USAccDeaths, start = c(1978, 1)),
+#'         Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
+#'                          naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
+#'         )
+#'    ),
+#'    list(Historical = window(UKDriverDeaths, end = c(1983, 12)),
+#'         Future = window(UKDriverDeaths, start = c(1984, 1)),
+#'         Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
+#'                          naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
+#'         )
+#'    )
+#' )
+#' check_time_series_collection(c)
 check_time_series_collection <- function(collection) {
   if (!is.list((collection)))
     return("A time series collection should be a list")
