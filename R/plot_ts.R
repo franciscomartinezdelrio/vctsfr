@@ -36,7 +36,7 @@
 #'         start = c(1978, 1),
 #'         frequency = 12
 #' )
-#' plot_ts(ts, future = f, p = p)
+#' plot_ts(ts, future = f, prediction = p)
 #'
 #' # plot a time series and a prediction
 #' plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
@@ -46,7 +46,7 @@
 #' p <- rep(mean(t), 6)     # prediction
 #' upi <- p + qnorm(0.975)*sd(t)
 #' lpi <- p - qnorm(0.975)*sd(t)
-#' plot_ts(t, prediction = rep(mean(t), 6), upi = upi, lpi = lpi, level = 0.9)
+#' plot_ts(t, prediction = p, upi = upi, lpi = lpi, level = 0.9)
 plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL, level = NULL, sdp = TRUE) {
   # check ts parameter
   if(! stats::is.ts(ts))

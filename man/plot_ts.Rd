@@ -59,7 +59,7 @@ p <- ts(window(USAccDeaths, start = c(1976, 1), end = c(1976, 12)),
         start = c(1978, 1),
         frequency = 12
 )
-plot_ts(ts, future = f, p = p)
+plot_ts(ts, future = f, prediction = p)
 
 # plot a time series and a prediction
 plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
@@ -69,5 +69,5 @@ t <- ts(rnorm(40, 0, 3)) # time series
 p <- rep(mean(t), 6)     # prediction
 upi <- p + qnorm(0.975)*sd(t)
 lpi <- p - qnorm(0.975)*sd(t)
-plot_ts(t, prediction = rep(mean(t), 6), upi = upi, lpi = lpi, level = 0.9)
+plot_ts(t, prediction = p, upi = upi, lpi = lpi, level = 0.9)
 }
