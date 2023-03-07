@@ -15,8 +15,8 @@
 #'   Upper limit of a prediction interval.
 #' @param lpi NULL (default) or a time series of class \code{ts} or a vector.
 #'   Lower limit of a prediction interval.
-#' @param level NULL (default) a number between 0 and 1 indicanting the level of
-#'   the prediction interval
+#' @param level NULL (default) a number in the interval (0, 100) indicating the
+#'   level of the prediction interval.
 #' @param sdp logical. Should data points be shown?
 #'
 #' @return The ggplot object representing the time series and its forecast.
@@ -43,10 +43,11 @@
 #'
 #' # plot a time series, a prediction and a prediction interval
 #' t <- ts(rnorm(40, 0, 3)) # time series
+#' f <- rnorm(6, 0, 3)      # future values
 #' p <- rep(mean(t), 6)     # prediction
 #' upi <- p + qnorm(0.975)*sd(t)
 #' lpi <- p - qnorm(0.975)*sd(t)
-#' plot_ts(t, prediction = p, upi = upi, lpi = lpi, level = 0.9)
+#' plot_ts(t, future = f, prediction = p, upi = upi, lpi = lpi, level = 95)
 plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL, level = NULL, sdp = TRUE) {
   # check ts parameter
   if(! stats::is.ts(ts))
@@ -75,7 +76,7 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL
     warning("prediction and lpi parameters should have the same length")
 
   # Check level parameter
-  if(!is.null(level) && (!is.numeric(level) || length(level) > 1 || level < 0 || level > 1))
+  if(!is.null(level) && (!is.numeric(level) || length(level) > 1 || level <= 0 || level >= 100))
      stop("Parameter level should be a scalar number between 0 and 1")
 
   # check sdp parameter
@@ -88,7 +89,7 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL
     type = "Historical"
   )
 
-  name_PI <- paste0(if (is.null(level)) "" else level*100, "% PI")
+  name_PI <- paste0(if (is.null(level)) "" else level, "% PI")
   df_f <- add_ts(future, ts, "Future")
   df_p <- add_ts(prediction, ts, "Forecast")
   df_upi <- add_ts(upi, ts, name_PI)

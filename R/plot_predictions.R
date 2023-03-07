@@ -2,9 +2,7 @@
 #' forecasts over that future values.
 #'
 #' @inheritParams plot_ts
-#' @param future time series of class \code{ts} or a vector. Future values of
-#'   the time series.
-#' @param predictions a named list containing the predictions for the future
+#' @param predictions NULL (default) or a named list containing the predictions for the future
 #'   values. Each element of the list should contain a vector or an object of
 #'   class \code{ts} representing a forecast, the name of the element should be
 #'   the name of the forecasting method.
@@ -20,7 +18,7 @@
 #' prediction2 <- as.vector(window(ts, start = c(1977, 1)))
 #' p <- list(mean = prediction1, naive = prediction2)
 #' plot_predictions(ts, future = f, predictions = p)
-plot_predictions <- function(ts, future, predictions, sdp = TRUE) {
+plot_predictions <- function(ts, future = NULL, predictions = NULL, sdp = TRUE) {
   # check ts parameter
   if(! stats::is.ts(ts))
     stop("Parameter ts should be of class ts")
@@ -28,17 +26,19 @@ plot_predictions <- function(ts, future, predictions, sdp = TRUE) {
   check_vector_ts(future, "future")         # check future parameter
 
   # check predictions parameter
-  if (!is.list(predictions))
-    stop("Predictions parameter should be a named list with the different forecasts")
-  if (is.null(names(predictions)) || any(names(predictions) == ""))
-    stop("All the elements in the list predictions should have a name")
+  if (!is.null(predictions)) {
+    if (!is.list(predictions))
+      stop("Predictions parameter should be a named list with the different forecasts")
+    if (is.null(names(predictions)) || any(names(predictions) == ""))
+      stop("All the elements in the list predictions should have a name")
 
-  for (ind in seq_along(predictions)) {
-    if(! (stats::is.ts(predictions[[ind]]) || is.numeric(predictions[[ind]]) ||
-          is.integer(predictions[[ind]]))) {
-      msg <- paste("Forecast", names(predictions)[ind],
-                   "should be a numeric vector or an object of class ts")
-      stop(msg)
+    for (ind in seq_along(predictions)) {
+      if(! (stats::is.ts(predictions[[ind]]) || is.numeric(predictions[[ind]]) ||
+            is.integer(predictions[[ind]]))) {
+        msg <- paste("Forecast", names(predictions)[ind],
+                     "should be a numeric vector or an object of class ts")
+        stop(msg)
+      }
     }
   }
 

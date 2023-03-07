@@ -5,15 +5,15 @@
 \title{Creates a ggplot object with a time series, some future values and several
 forecasts over that future values.}
 \usage{
-plot_predictions(ts, future, predictions, sdp = TRUE)
+plot_predictions(ts, future = NULL, predictions = NULL, sdp = TRUE)
 }
 \arguments{
 \item{ts}{a time series of class \code{ts}.}
 
-\item{future}{time series of class \code{ts} or a vector. Future values of
-the time series.}
+\item{future}{NULL (default) or a time series of class \code{ts} or a vector.
+Future values of the time series.}
 
-\item{predictions}{a named list containing the predictions for the future
+\item{predictions}{NULL (default) or a named list containing the predictions for the future
 values. Each element of the list should contain a vector or an object of
 class \code{ts} representing a forecast, the name of the element should be
 the name of the forecasting method.}

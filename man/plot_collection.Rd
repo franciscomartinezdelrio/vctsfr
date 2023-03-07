@@ -41,14 +41,14 @@ shown.
 }
 \examples{
 c <- list(
-   list(Historical = window(USAccDeaths, end = c(1977, 12)),
-        Future = window(USAccDeaths, start = c(1978, 1)),
+   ts_info(window(USAccDeaths, end = c(1977, 12)),
+        future = window(USAccDeaths, start = c(1978, 1)),
         Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
                          naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
         )
    ),
-   list(Historical = window(UKDriverDeaths, end = c(1983, 12)),
-        Future = window(UKDriverDeaths, start = c(1984, 1)),
+   ts_info(window(UKDriverDeaths, end = c(1983, 12)),
+        future = window(UKDriverDeaths, start = c(1984, 1)),
         Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
                          naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
         )

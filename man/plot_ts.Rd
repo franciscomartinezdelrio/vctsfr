@@ -29,8 +29,8 @@ Upper limit of a prediction interval.}
 \item{lpi}{NULL (default) or a time series of class \code{ts} or a vector.
 Lower limit of a prediction interval.}
 
-\item{level}{NULL (default) a number between 0 and 1 indicanting the level of
-the prediction interval}
+\item{level}{NULL (default) a number in the interval (0, 100) indicating the
+level of the prediction interval.}
 
 \item{sdp}{logical. Should data points be shown?}
 }
@@ -66,8 +66,9 @@ plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
 
 # plot a time series, a prediction and a prediction interval
 t <- ts(rnorm(40, 0, 3)) # time series
+f <- rnorm(6, 0, 3)      # future values
 p <- rep(mean(t), 6)     # prediction
 upi <- p + qnorm(0.975)*sd(t)
 lpi <- p - qnorm(0.975)*sd(t)
-plot_ts(t, prediction = p, upi = upi, lpi = lpi, level = 0.9)
+plot_ts(t, future = f, prediction = p, upi = upi, lpi = lpi, level = 95)
 }

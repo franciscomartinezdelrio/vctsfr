@@ -29,14 +29,14 @@
 #'
 #' @examples
 #' c <- list(
-#'    list(Historical = window(USAccDeaths, end = c(1977, 12)),
-#'         Future = window(USAccDeaths, start = c(1978, 1)),
+#'    ts_info(window(USAccDeaths, end = c(1977, 12)),
+#'         future = window(USAccDeaths, start = c(1978, 1)),
 #'         Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
 #'                          naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
 #'         )
 #'    ),
-#'    list(Historical = window(UKDriverDeaths, end = c(1983, 12)),
-#'         Future = window(UKDriverDeaths, start = c(1984, 1)),
+#'    ts_info(window(UKDriverDeaths, end = c(1983, 12)),
+#'         future = window(UKDriverDeaths, start = c(1984, 1)),
 #'         Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
 #'                          naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
 #'         )
@@ -57,10 +57,20 @@ plot_collection <- function(collection, number, sdp = TRUE) {
   # check sdp parameter
   if(! is.logical(sdp))
     stop("Parameter sdp should be a logical value")
-  plot_predictions(collection[[number]]$Historical,
-                   collection[[number]]$Future,
-                   collection[[number]]$Forecast,
-                   sdp
+
+  if ("forecasts" %in% names(collection[[number]])) {
+    p <- list()
+    for (pred in collection[[number]]$forecasts) {
+      p[[length(p) + 1]] <- pred$forecast
+      names(p)[[length(p)]] <- pred$name
+    }
+  } else {
+    p <- NULL
+  }
+  plot_predictions(collection[[number]]$historical,
+                   future = collection[[number]]$future,
+                   predictions = p,
+                   sdp = sdp
   )
 }
 
@@ -98,59 +108,10 @@ check_time_series_collection <- function(collection) {
   if (!is.list((collection)))
     return("A time series collection should be a list")
   for (ind in seq_along(collection)) {
-    r <- check_element(collection[[ind]], ind)
-    if (r != "OK")
-      return(r)
+    if (class(collection[[ind]]) != "ts_info") {
+      return(paste0("Component [[", ind, "]] of collection should be of class ts_info"))
+    }
   }
   return("OK")
 }
 
-# Check one of the elements of a collection of series and forecasts
-check_element <- function(e, index) {
-  if (!is.list(e))
-    return(paste0("Component [[", index, "]] of collection should be a list"))
-  if (length(e) != 3)
-    return(paste0("Component [[", index,
-                  "]] of collection should have 3 components. Currently it has ", length(e),
-                  " components")
-    )
-  if (is.null(names(e)))
-    return(paste0("The components of component [[", index, "]] of collection have no names"))
-
-  # Historical values
-  if (is.null(names(e)[1]) || names(e)[1] != "Historical") {
-    if (names(e)[1] == "")
-      return(paste0("The first component of component [[", index, "]] of collection has no name and it should be 'Historical'"))
-    else
-      return(paste0("The name of the first component of component [[", index, "]] of collection should be 'Historical', not '", names(e[1]), "'"))
-  }
-  if(! stats::is.ts(e$Historical))
-    return(paste0("The Historical component of component [[", index, "]] of collection should be of class ts"))
-
-  # Future values
-  if (is.null(names(e)[2]) || names(e)[2] != "Future") {
-    if (names(e)[2] == "")
-      return(paste0("The first component of component [[", index, "]] of collection has no name and it should be 'Future'"))
-    else
-      return(paste0("The name of the first component of component [[", index, "]] of collection should be 'Future', not '", names(e[2]), "'"))
-  }
-  if(! (stats::is.ts(e$Future) || is.numeric(e$Future) || is.integer(e$Future)))
-    return(paste0("The Future component of component [[", index, "]] of collection should be an object of class ts or a vector"))
-
-  # Forecasts values
-  if (is.null(names(e)[3]) || names(e)[3] != "Forecasts") {
-    if (names(e)[3] == "")
-      return(paste0("The first component of component [[", index, "]] of collection has no name and it should be 'Forecasts'"))
-    else
-      return(paste0("The name of the first component of component [[", index, "]] of collection should be 'Forecasts', not '", names(e[3]), "'"))
-  }
-  if (!is.list(e$Forecast))
-    return(paste0("The 'Forecasts' component of component [[", index, "]] of collection should be a list"))
-  if (is.null(names(e$Forecasts)) || any(names(e$Forecasts) == ""))
-    return(paste0("All the components of component 'Forecasts' of component [[", index, "]] of collection should have a name"))
-  for (f in e$Forecasts) {
-    if(! (stats::is.ts(f) || is.numeric(f) || is.integer(f)))
-      return(paste0("Each forecast of component [[", index, "]] should be an object of class ts or a vector"))
-  }
-  return("OK")
-}
