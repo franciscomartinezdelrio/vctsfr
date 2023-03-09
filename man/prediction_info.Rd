@@ -13,10 +13,10 @@ prediction_info(name, forecast, ...)
 prediction for the future values of a time series.}
 
 \item{...}{prediction intervals for the forecast. These prediction intervals
-must be built with the \code{\link[=pi_info]{pi_info()}} function.}
+must have been built with the \code{\link[=pi_info]{pi_info()}} function.}
 }
 \value{
-an object of class \code{pred_info}. A list with the information specified
+an object of class \code{pred_info}. A list with the information supplied
 to the function.
 }
 \description{

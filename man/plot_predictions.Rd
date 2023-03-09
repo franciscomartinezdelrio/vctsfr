@@ -2,8 +2,7 @@
 % Please edit documentation in R/plot_predictions.R
 \name{plot_predictions}
 \alias{plot_predictions}
-\title{Creates a ggplot object with a time series, some future values and several
-forecasts over that future values.}
+\title{Creates a ggplot object with a time series and some forecasts}
 \usage{
 plot_predictions(ts, future = NULL, predictions = NULL, sdp = TRUE)
 }
@@ -13,19 +12,19 @@ plot_predictions(ts, future = NULL, predictions = NULL, sdp = TRUE)
 \item{future}{NULL (default) or a time series of class \code{ts} or a vector.
 Future values of the time series.}
 
-\item{predictions}{NULL (default) or a named list containing the predictions for the future
-values. Each element of the list should contain a vector or an object of
-class \code{ts} representing a forecast, the name of the element should be
-the name of the forecasting method.}
+\item{predictions}{NULL (default) or a named list containing the predictions
+for the future values. Each component of the list should contain a vector
+or an object of class \code{ts} representing a forecast, the name of the
+component should be the name of the forecasting method.}
 
-\item{sdp}{logical. Should data points be shown?}
+\item{sdp}{logical. Should data points be shown? (default value \code{TRUE})}
 }
 \value{
 The ggplot object representing the time series and its forecast.
 }
 \description{
-Creates a ggplot object with a time series, some future values and several
-forecasts over that future values.
+Create a ggplot object with a time series and, optionally, some future values
+of the time series and several forecast for those future values.
 }
 \examples{
 # plot a time series, its future values and two forecasts

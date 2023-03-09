@@ -8,8 +8,9 @@ plot_ts(
   ts,
   future = NULL,
   prediction = NULL,
-  upi = NULL,
+  method = NULL,
   lpi = NULL,
+  upi = NULL,
   level = NULL,
   sdp = TRUE
 )
@@ -21,29 +22,33 @@ plot_ts(
 Future values of the time series.}
 
 \item{prediction}{NULL (default) or a time series of class \code{ts} or a
-vector. Prediction of the time series.}
+vector. Forecast of the future values of the time series.}
 
-\item{upi}{NULL (default) or a time series of class \code{ts} or a vector.
-Upper limit of a prediction interval.}
+\item{method}{(NULL) (default) a character string with the name of the method
+used to forecast the future values of the time series.}
 
 \item{lpi}{NULL (default) or a time series of class \code{ts} or a vector.
-Lower limit of a prediction interval.}
+Lower limit of a prediction interval for the \code{prediction} parameter.}
+
+\item{upi}{NULL (default) or a time series of class \code{ts} or a vector.
+Upper limit of a prediction interval for the \code{prediction} parameter.}
 
 \item{level}{NULL (default) a number in the interval (0, 100) indicating the
 level of the prediction interval.}
 
-\item{sdp}{logical. Should data points be shown?}
+\item{sdp}{logical. Should data points be shown? (default value \code{TRUE})}
 }
 \value{
 The ggplot object representing the time series and its forecast.
 }
 \description{
-A ggplot object associated with the time series (and, optionally, its future
-values, prediction and prediction intervals) is created and plotted.
+Create a ggplot object associated with a time series and, optionally, its
+future values, a forecast for its future values and a prediction interval of
+the forecast.
 }
 \details{
 If \code{future} or \code{prediction} are vectors then they are supposed to
-start after the time series.
+start after the last data of the time series.
 }
 \examples{
 library(ggplot2)
@@ -65,10 +70,13 @@ plot_ts(ts, future = f, prediction = p)
 plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
 
 # plot a time series, a prediction and a prediction interval
-t <- ts(rnorm(40, 0, 3)) # time series
-f <- rnorm(6, 0, 3)      # future values
-p <- rep(mean(t), 6)     # prediction
-upi <- p + qnorm(0.975)*sd(t)
-lpi <- p - qnorm(0.975)*sd(t)
-plot_ts(t, future = f, prediction = p, upi = upi, lpi = lpi, level = 95)
+if (require(forecast)) {
+  timeS <- window(USAccDeaths, end = c(1977, 12))
+  f <- window(USAccDeaths, start = c(1978, 1))
+  ets_fit <- ets(timeS)
+  p <- forecast(ets_fit, h = length(f), level = 90)
+  plot_ts(timeS, future = f, prediction = p$mean, lpi = p$lower,
+          upi = p$upper, level = 90
+  )
+}
 }

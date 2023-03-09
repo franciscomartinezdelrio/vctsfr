@@ -1,11 +1,13 @@
-#' Creates a ggplot object with a time series, some future values and several
-#' forecasts over that future values.
+#' Creates a ggplot object with a time series and some forecasts
+#'
+#' Create a ggplot object with a time series and, optionally, some future values
+#' of the time series and several forecast for those future values.
 #'
 #' @inheritParams plot_ts
-#' @param predictions NULL (default) or a named list containing the predictions for the future
-#'   values. Each element of the list should contain a vector or an object of
-#'   class \code{ts} representing a forecast, the name of the element should be
-#'   the name of the forecasting method.
+#' @param predictions NULL (default) or a named list containing the predictions
+#'   for the future values. Each component of the list should contain a vector
+#'   or an object of class \code{ts} representing a forecast, the name of the
+#'   component should be the name of the forecasting method.
 #'
 #' @return The ggplot object representing the time series and its forecast.
 #' @export

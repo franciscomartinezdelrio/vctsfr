@@ -4,18 +4,21 @@
 \alias{ts_info}
 \title{Create an object with information about a time series}
 \usage{
-ts_info(historical, future = NULL, ...)
+ts_info(historical, ..., future = NULL, name = NULL)
 }
 \arguments{
 \item{historical}{a time series of class \code{ts} with the historical values
 of the series.}
 
+\item{...}{forecasts for the future values of the time series. A forecast
+must have been built with the \code{\link[=prediction_info]{prediction_info()}} function. See the
+examples section.}
+
 \item{future}{NULL (default) or a time series of class \code{ts} or a vector.
 The future values of the time series (possibly to be forecast).}
 
-\item{...}{forecasts for the future values of the time series. A forecast
-must be built with the \code{\link[=prediction_info]{prediction_info()}} function. See the examples
-section.}
+\item{name}{NULL (default) or a character string with information about the
+time series.}
 }
 \value{
 An object of class \code{ts_info}. It is a list containing all the
@@ -38,7 +41,7 @@ if (require("forecast")) {
   t <- ts(rnorm(50))
   f <- rnorm(10)
   mf <- meanf(t, level = 95)
-  info3 <- ts_info(t, f,
+  info3 <- ts_info(t, future = f,
                    prediction_info("mean", mf$mean,
                                    pi_info(95, mf$lower, mf$upper)
                    )

@@ -6,20 +6,16 @@
 #' future values form part of the ggplot object.
 #'
 #' The `collection` parameter must be a list. Each component of the list stores
-#' a time series, its future values and its forecasts. Each component should
-#' have the following fields with the same names and in the same order:
-#'
-#' * Historical: an object of class `ts` with the historical
-#' values of the time series.
-#' * Future: a vector or object of class `ts` with the future values to be predicted.
-#' * Forecasts: a named list. Each component contains a vector or
-#' object of class `ts` with a forecast for the future values of the series.
+#' a time series and, optionally, its future values, forecasts for the future
+#' values and prediction intervals for the forecasts. Each component should have
+#' been created using the [ts_info()] function.
 #'
 #' In the example section you can see an example of a collection of time series.
 #' If the `collection` parameter is not specified correctly, a proper message is
 #' shown.
 #'
-#' @param collection a list with the collection of time series. See details.
+#' @param collection a list with the collection of time series. Each component
+#'   of the list must have been built with the [ts_info()] function.
 #' @param number an integer. The number of the time series. It should be a value
 #'   between 1 and `length(collection)`.
 #' @param sdp logical. Should data points be shown in the plot?
@@ -27,23 +23,16 @@
 #' @return The ggplot object representing the time series and its forecast.
 #' @export
 #'
+#' @seealso [ts_info()] function to see how to build the components of the
+#'   `collection` parameter.
 #' @examples
+#' # create a collection of two time series and plot both time series
 #' c <- list(
-#'    ts_info(window(USAccDeaths, end = c(1977, 12)),
-#'         future = window(USAccDeaths, start = c(1978, 1)),
-#'         Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
-#'                          naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
-#'         )
-#'    ),
-#'    ts_info(window(UKDriverDeaths, end = c(1983, 12)),
-#'         future = window(UKDriverDeaths, start = c(1984, 1)),
-#'         Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
-#'                          naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
-#'         )
-#'    )
+#'           ts_info(USAccDeaths),
+#'           ts_info(ldeaths)
 #' )
-#' plot_collection(c, 1)
-#' plot_collection(c, 2)
+#' plot_collection(c, number = 1)
+#' plot_collection(c, number = 2)
 plot_collection <- function(collection, number, sdp = TRUE) {
   # check collection parameter
   r <- check_time_series_collection(collection)
@@ -108,7 +97,7 @@ check_time_series_collection <- function(collection) {
   if (!is.list((collection)))
     return("A time series collection should be a list")
   for (ind in seq_along(collection)) {
-    if (class(collection[[ind]]) != "ts_info") {
+    if (! methods::is(collection[[ind]], "ts_info")) {
       return(paste0("Component [[", ind, "]] of collection should be of class ts_info"))
     }
   }

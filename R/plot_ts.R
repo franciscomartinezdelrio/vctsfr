@@ -1,23 +1,26 @@
 #' Create a ggplot object with a time series and forecast
 #'
-#' A ggplot object associated with the time series (and, optionally, its future
-#' values, prediction and prediction intervals) is created and plotted.
+#' Create a ggplot object associated with a time series and, optionally, its
+#' future values, a forecast for its future values and a prediction interval of
+#' the forecast.
 #'
 #' If \code{future} or \code{prediction} are vectors then they are supposed to
-#' start after the time series.
+#' start after the last data of the time series.
 #'
 #' @param ts a time series of class \code{ts}.
 #' @param future NULL (default) or a time series of class \code{ts} or a vector.
 #'   Future values of the time series.
 #' @param prediction NULL (default) or a time series of class \code{ts} or a
-#'   vector. Prediction of the time series.
-#' @param upi NULL (default) or a time series of class \code{ts} or a vector.
-#'   Upper limit of a prediction interval.
+#'   vector. Forecast of the future values of the time series.
+#' @param method (NULL) (default) a character string with the name of the method
+#'   used to forecast the future values of the time series.
 #' @param lpi NULL (default) or a time series of class \code{ts} or a vector.
-#'   Lower limit of a prediction interval.
+#'   Lower limit of a prediction interval for the `prediction` parameter.
+#' @param upi NULL (default) or a time series of class \code{ts} or a vector.
+#'   Upper limit of a prediction interval for the `prediction` parameter.
 #' @param level NULL (default) a number in the interval (0, 100) indicating the
 #'   level of the prediction interval.
-#' @param sdp logical. Should data points be shown?
+#' @param sdp logical. Should data points be shown? (default value `TRUE`)
 #'
 #' @return The ggplot object representing the time series and its forecast.
 #' @export
@@ -42,13 +45,17 @@
 #' plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
 #'
 #' # plot a time series, a prediction and a prediction interval
-#' t <- ts(rnorm(40, 0, 3)) # time series
-#' f <- rnorm(6, 0, 3)      # future values
-#' p <- rep(mean(t), 6)     # prediction
-#' upi <- p + qnorm(0.975)*sd(t)
-#' lpi <- p - qnorm(0.975)*sd(t)
-#' plot_ts(t, future = f, prediction = p, upi = upi, lpi = lpi, level = 95)
-plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL, level = NULL, sdp = TRUE) {
+#' if (require(forecast)) {
+#'   timeS <- window(USAccDeaths, end = c(1977, 12))
+#'   f <- window(USAccDeaths, start = c(1978, 1))
+#'   ets_fit <- ets(timeS)
+#'   p <- forecast(ets_fit, h = length(f), level = 90)
+#'   plot_ts(timeS, future = f, prediction = p$mean, lpi = p$lower,
+#'           upi = p$upper, level = 90
+#'   )
+#' }
+plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = NULL,
+                    upi = NULL, level = NULL, sdp = TRUE) {
   # check ts parameter
   if(! stats::is.ts(ts))
     stop("Parameter ts should be of class ts")
@@ -59,6 +66,10 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL
   # check different lengths of future and prediction
   if (!is.null(future) && !is.null(prediction) && length(future) != length(prediction))
     warning("Length of prediction and future parameters are different")
+
+  # check method parameter
+  if (! (is.null(method) || (is.character(method) && length(method) == 1)))
+    stop("method parameter should be a character string")
 
   check_vector_ts(upi, "upi") # check upi parameter
   check_vector_ts(lpi, "lpi") # check lpi parameter
@@ -89,9 +100,12 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL
     type = "Historical"
   )
 
+  if (is.null(method))
+    method <- "Forecast"
+
   name_PI <- paste0(if (is.null(level)) "" else level, "% PI")
   df_f <- add_ts(future, ts, "Future")
-  df_p <- add_ts(prediction, ts, "Forecast")
+  df_p <- add_ts(prediction, ts, method)
   df_upi <- add_ts(upi, ts, name_PI)
   df_lpi <- add_ts(lpi, ts, "Lower PI")
 
@@ -103,20 +117,20 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, upi = NULL, lpi = NULL
   if (!is.null(lpi)) {
     p <- p + ggplot2::geom_line(ggplot2::aes(x, y), data = df_lpi, colour = "pink")
     if (sdp)
-      p <- p + ggplot2::geom_point(ggplot2::aes(x, y), data = df_lpi, colour = "pink", size = 1)
+      p <- p + ggplot2::geom_point(ggplot2::aes(x, y), data = df_lpi, colour = "pink", size = 1, alpha = 0.5)
   }
 
   if (!is.null(upi) && !is.null(lpi)) {
     limits <- data.frame(x = df_upi$x, y = df_p$y, upi = upi, lpi = lpi)
-    p <- p + ggplot2::geom_ribbon(data = limits, ggplot2::aes(x = x, ymax = upi, ymin = lpi), fill = "pink", alpha = 0.25)
+    p <- p + ggplot2::geom_ribbon(data = limits, ggplot2::aes(x = x, ymax = upi, ymin = lpi), fill = "pink", alpha = 0.5)
   }
   if (sdp) {
     p <- p + ggplot2::geom_point(size = 1, ggplot2::aes(color = type))
   }
   p <- p + ggplot2::labs(x = "Time", y = NULL, color = "Series")
-  breaks <- c("Historical", "Future", "Forecast", name_PI)
+  breaks <- c("Historical", "Future", method, name_PI)
   colours <- c("black", my_colours("blue"), my_colours("red"), "pink")
-  names(colours) <- c("Historical", "Future", "Forecast", name_PI)
+  names(colours) <- c("Historical", "Future", method, name_PI)
   p <- p + ggplot2::scale_colour_manual(values = colours, breaks = breaks)
   p
 }

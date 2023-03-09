@@ -8,7 +8,8 @@ collection}
 plot_collection(collection, number, sdp = TRUE)
 }
 \arguments{
-\item{collection}{a list with the collection of time series. See details.}
+\item{collection}{a list with the collection of time series. Each component
+of the list must have been built with the \code{\link[=ts_info]{ts_info()}} function.}
 
 \item{number}{an integer. The number of the time series. It should be a value
 between 1 and \code{length(collection)}.}
@@ -25,35 +26,24 @@ future values form part of the ggplot object.
 }
 \details{
 The \code{collection} parameter must be a list. Each component of the list stores
-a time series, its future values and its forecasts. Each component should
-have the following fields with the same names and in the same order:
-\itemize{
-\item Historical: an object of class \code{ts} with the historical
-values of the time series.
-\item Future: a vector or object of class \code{ts} with the future values to be predicted.
-\item Forecasts: a named list. Each component contains a vector or
-object of class \code{ts} with a forecast for the future values of the series.
-}
+a time series and, optionally, its future values, forecasts for the future
+values and prediction intervals for the forecasts. Each component should have
+been created using the \code{\link[=ts_info]{ts_info()}} function.
 
 In the example section you can see an example of a collection of time series.
 If the \code{collection} parameter is not specified correctly, a proper message is
 shown.
 }
 \examples{
+# create a collection of two time series and plot both time series
 c <- list(
-   ts_info(window(USAccDeaths, end = c(1977, 12)),
-        future = window(USAccDeaths, start = c(1978, 1)),
-        Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
-                         naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
-        )
-   ),
-   ts_info(window(UKDriverDeaths, end = c(1983, 12)),
-        future = window(UKDriverDeaths, start = c(1984, 1)),
-        Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
-                         naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
-        )
-   )
+          ts_info(USAccDeaths),
+          ts_info(ldeaths)
 )
-plot_collection(c, 1)
-plot_collection(c, 2)
+plot_collection(c, number = 1)
+plot_collection(c, number = 2)
+}
+\seealso{
+\code{\link[=ts_info]{ts_info()}} function to see how to build the components of the
+\code{collection} parameter.
 }

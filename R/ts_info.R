@@ -5,11 +5,13 @@
 #'
 #' @param historical a time series of class \code{ts} with the historical values
 #'   of the series.
+#' @param ... forecasts for the future values of the time series. A forecast
+#'   must have been built with the [prediction_info()] function. See the
+#'   examples section.
 #' @param future NULL (default) or a time series of class \code{ts} or a vector.
 #'   The future values of the time series (possibly to be forecast).
-#' @param ... forecasts for the future values of the time series. A forecast
-#'   must be built with the [prediction_info()] function. See the examples
-#'   section.
+#' @param name NULL (default) or a character string with information about the
+#'   time series.
 #'
 #' @return An object of class `ts_info`. It is a list containing all the
 #'   information supplied to the function.
@@ -29,13 +31,13 @@
 #'   t <- ts(rnorm(50))
 #'   f <- rnorm(10)
 #'   mf <- meanf(t, level = 95)
-#'   info3 <- ts_info(t, f,
+#'   info3 <- ts_info(t, future = f,
 #'                    prediction_info("mean", mf$mean,
 #'                                    pi_info(95, mf$lower, mf$upper)
 #'                    )
 #'   )
 #' }
-ts_info <- function(historical, future = NULL, ...) {
+ts_info <- function(historical, ..., future = NULL, name = NULL) {
   # check historical parameter
   if(! stats::is.ts(historical))
     stop("Parameter historical should be of class ts")
@@ -49,11 +51,15 @@ ts_info <- function(historical, future = NULL, ...) {
   # check ... parameter
   l <- list(...)
   for (x in l) {
-    if (class(x) != "pred_info")
+    if (! methods::is(x, "pred_info"))
       stop("All the ... parameters should be of class pred_info")
   }
 
-  info <- list(historical = historical, future = future)
+  # check name parameter
+  if (! (is.null(name) || (is.character(name) && length(name) == 1)))
+    stop("name parameter should be a character string")
+
+  info <- list(historical = historical, name = name, future = future)
   if (length(l) > 0)
     info$forecasts <- l
   class(info) <- "ts_info"
@@ -69,9 +75,9 @@ ts_info <- function(historical, future = NULL, ...) {
 #' @param forecast a time series of class \code{ts} or a vector. It is a
 #'   prediction for the future values of a time series.
 #' @param ... prediction intervals for the forecast. These prediction intervals
-#'   must be built with the [pi_info()] function.
+#'   must have been built with the [pi_info()] function.
 #'
-#' @return an object of class `pred_info`. A list with the information specified
+#' @return an object of class `pred_info`. A list with the information supplied
 #'   to the function.
 #' @export
 #'
@@ -96,7 +102,7 @@ prediction_info <- function(name, forecast, ...) {
   # check ... parameter
   l <- list(...)
   for (x in l) {
-    if (class(x) != "pi_info")
+    if (! methods::is(x, "pi_info"))
       stop("All the ... parameters should be of class pi_info")
     if (length(forecast) != length(x$lpi))
       stop("The length of a prediction interval is different from the length of the forecast")
