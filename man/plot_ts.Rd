@@ -25,7 +25,8 @@ Future values of the time series.}
 vector. Forecast of the future values of the time series.}
 
 \item{method}{(NULL) (default) a character string with the name of the method
-used to forecast the future values of the time series.}
+used to forecast the future values of the time series. This name will
+appear in the legend.}
 
 \item{lpi}{NULL (default) or a time series of class \code{ts} or a vector.
 Lower limit of a prediction interval for the \code{prediction} parameter.}
@@ -42,7 +43,7 @@ level of the prediction interval.}
 The ggplot object representing the time series and its forecast.
 }
 \description{
-Create a ggplot object associated with a time series and, optionally, its
+Create a \code{ggplot} object associated with a time series and, optionally, its
 future values, a forecast for its future values and a prediction interval of
 the forecast.
 }
@@ -67,7 +68,8 @@ p <- ts(window(USAccDeaths, start = c(1976, 1), end = c(1976, 12)),
 plot_ts(ts, future = f, prediction = p)
 
 # plot a time series and a prediction
-plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
+plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12),
+        method = "Mean")
 
 # plot a time series, a prediction and a prediction interval
 if (require(forecast)) {
@@ -75,8 +77,8 @@ if (require(forecast)) {
   f <- window(USAccDeaths, start = c(1978, 1))
   ets_fit <- ets(timeS)
   p <- forecast(ets_fit, h = length(f), level = 90)
-  plot_ts(timeS, future = f, prediction = p$mean, lpi = p$lower,
-          upi = p$upper, level = 90
+  plot_ts(timeS, future = f, prediction = p$mean, method = "Mean",
+          lpi = p$lower, upi = p$upper, level = 90
   )
 }
 }

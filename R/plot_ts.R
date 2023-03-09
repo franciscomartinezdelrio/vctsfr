@@ -1,6 +1,6 @@
 #' Create a ggplot object with a time series and forecast
 #'
-#' Create a ggplot object associated with a time series and, optionally, its
+#' Create a `ggplot` object associated with a time series and, optionally, its
 #' future values, a forecast for its future values and a prediction interval of
 #' the forecast.
 #'
@@ -13,7 +13,8 @@
 #' @param prediction NULL (default) or a time series of class \code{ts} or a
 #'   vector. Forecast of the future values of the time series.
 #' @param method (NULL) (default) a character string with the name of the method
-#'   used to forecast the future values of the time series.
+#'   used to forecast the future values of the time series. This name will
+#'   appear in the legend.
 #' @param lpi NULL (default) or a time series of class \code{ts} or a vector.
 #'   Lower limit of a prediction interval for the `prediction` parameter.
 #' @param upi NULL (default) or a time series of class \code{ts} or a vector.
@@ -42,7 +43,8 @@
 #' plot_ts(ts, future = f, prediction = p)
 #'
 #' # plot a time series and a prediction
-#' plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12))
+#' plot_ts(USAccDeaths, prediction = rep(mean(USAccDeaths), 12),
+#'         method = "Mean")
 #'
 #' # plot a time series, a prediction and a prediction interval
 #' if (require(forecast)) {
@@ -50,8 +52,8 @@
 #'   f <- window(USAccDeaths, start = c(1978, 1))
 #'   ets_fit <- ets(timeS)
 #'   p <- forecast(ets_fit, h = length(f), level = 90)
-#'   plot_ts(timeS, future = f, prediction = p$mean, lpi = p$lower,
-#'           upi = p$upper, level = 90
+#'   plot_ts(timeS, future = f, prediction = p$mean, method = "ES",
+#'           lpi = p$lower, upi = p$upper, level = 90
 #'   )
 #' }
 plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = NULL,
@@ -87,8 +89,10 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = N
     warning("prediction and lpi parameters should have the same length")
 
   # Check level parameter
-  if(!is.null(level) && (!is.numeric(level) || length(level) > 1 || level <= 0 || level >= 100))
+  if (!is.null(level) && (!is.numeric(level) || length(level) > 1 || level <= 0 || level >= 100))
      stop("Parameter level should be a scalar number between 0 and 1")
+  if (is.null(level) && !is.null(lpi))
+    stop("If the prediction interval is specified, the level parameter should be specified")
 
   # check sdp parameter
   if(! is.logical(sdp))
