@@ -36,6 +36,6 @@ ts <- window(USAccDeaths, end = c(1977, 12))
 f <- window(USAccDeaths, start = c(1978, 1))
 prediction1 <- rep(mean(ts), 12)
 prediction2 <- as.vector(window(ts, start = c(1977, 1)))
-p <- list(mean = prediction1, naive = prediction2)
+p <- list(Mean = prediction1, Naive = prediction2)
 plot_predictions(ts, future = f, predictions = p)
 }

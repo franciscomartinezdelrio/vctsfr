@@ -1,7 +1,8 @@
 #' Create an object with information about a time series
 #'
 #' The information about the time series is compounded of the time series and,
-#' optionally, its future values and forecasts for those future values
+#' optionally, its future values and forecasts for those future values (and
+#' prediction intervals for those forecasts)
 #'
 #' @param historical a time series of class \code{ts} with the historical values
 #'   of the series.
