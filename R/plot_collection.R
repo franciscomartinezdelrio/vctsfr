@@ -1,9 +1,9 @@
 #' Create the associated ggplot object of a time series belonging to a
 #' collection
 #'
-#' Create the associated ggplot object of a time series belonging to a
+#' Create a `ggplot` object associated with a time series belonging to a
 #' collection. Apart from the time series, future values and forecasts for the
-#' future values form part of the ggplot object.
+#' future values form part of the `ggplot` object.
 #'
 #' The `collection` parameter must be a list. Each component of the list stores
 #' a time series and, optionally, its future values, forecasts for the future
@@ -18,7 +18,7 @@
 #'   of the list must have been built with the [ts_info()] function.
 #' @param number an integer. The number of the time series. It should be a value
 #'   between 1 and `length(collection)`.
-#' @param sdp logical. Should data points be shown in the plot?
+#' @param sdp logical. Should data points be shown in the plot? (default value `TRUE`)
 #'
 #' @return The ggplot object representing the time series and its forecast.
 #' @export

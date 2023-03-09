@@ -14,15 +14,15 @@ of the list must have been built with the \code{\link[=ts_info]{ts_info()}} func
 \item{number}{an integer. The number of the time series. It should be a value
 between 1 and \code{length(collection)}.}
 
-\item{sdp}{logical. Should data points be shown in the plot?}
+\item{sdp}{logical. Should data points be shown in the plot? (default value \code{TRUE})}
 }
 \value{
 The ggplot object representing the time series and its forecast.
 }
 \description{
-Create the associated ggplot object of a time series belonging to a
+Create a \code{ggplot} object associated with a time series belonging to a
 collection. Apart from the time series, future values and forecasts for the
-future values form part of the ggplot object.
+future values form part of the \code{ggplot} object.
 }
 \details{
 The \code{collection} parameter must be a list. Each component of the list stores

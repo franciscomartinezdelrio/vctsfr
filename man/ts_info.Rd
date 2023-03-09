@@ -27,7 +27,7 @@ information supplied to the function.
 \description{
 The information about the time series is compounded of the time series and,
 optionally, its future values and forecasts for those future values (and
-prediction intervals for those forecasts)
+prediction intervals for those forecasts).
 }
 \examples{
 # only information about a time series

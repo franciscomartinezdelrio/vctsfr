@@ -2,7 +2,7 @@
 #'
 #' The information about the time series is compounded of the time series and,
 #' optionally, its future values and forecasts for those future values (and
-#' prediction intervals for those forecasts)
+#' prediction intervals for those forecasts).
 #'
 #' @param historical a time series of class \code{ts} with the historical values
 #'   of the series.
@@ -119,10 +119,10 @@ prediction_info <- function(name, forecast, ...) {
 #' Create a prediction interval object
 #'
 #' The object represents a prediction interval for the forecast of the future
-#' values of a time series
+#' values of a time series.
 #'
 #' @param level a number in the interval (0, 100) indicating the level of the
-#'   prediction interval
+#'   prediction interval.
 #' @param lpi a time series of class \code{ts} or a vector. Lower limit of a
 #'   prediction interval.
 #' @param upi a time series of class \code{ts} or a vector. Upper limit of a

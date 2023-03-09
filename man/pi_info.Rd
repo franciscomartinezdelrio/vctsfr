@@ -8,7 +8,7 @@ pi_info(level, lpi, upi)
 }
 \arguments{
 \item{level}{a number in the interval (0, 100) indicating the level of the
-prediction interval}
+prediction interval.}
 
 \item{lpi}{a time series of class \code{ts} or a vector. Lower limit of a
 prediction interval.}
@@ -22,7 +22,7 @@ information supplied to the function.
 }
 \description{
 The object represents a prediction interval for the forecast of the future
-values of a time series
+values of a time series.
 }
 \examples{
 if (require("forecast")) {
