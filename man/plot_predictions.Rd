@@ -13,18 +13,22 @@ plot_predictions(ts, future = NULL, predictions = NULL, sdp = TRUE)
 Future values of the time series.}
 
 \item{predictions}{NULL (default) or a named list containing the predictions
-for the future values. Each component of the list should contain a vector
-or an object of class \code{ts} representing a forecast, the name of the
+for the future values. Each component of the list should contain a vector or
+an object of class \code{ts} representing a forecast, the name of the
 component should be the name of the forecasting method.}
 
 \item{sdp}{logical. Should data points be shown? (default value \code{TRUE})}
 }
 \value{
-The ggplot object representing the time series and its forecast.
+The \code{ggplot} object representing the time series and its forecast.
 }
 \description{
-Create a ggplot object with a time series and, optionally, some future values
-of the time series and several forecast for those future values.
+Create a \code{ggplot} object with a time series and, optionally, some future
+values of the time series and several forecast for those future values.
+}
+\details{
+If \code{future} or the forecasts in the \code{prediction} list are vectors
+then they are supposed to start after the last data of the time series.
 }
 \examples{
 # plot a time series, its future values and two forecasts

@@ -23,7 +23,7 @@
 #'   level of the prediction interval.
 #' @param sdp logical. Should data points be shown? (default value `TRUE`)
 #'
-#' @return The ggplot object representing the time series and its forecast.
+#' @return The `ggplot` object representing the time series and its forecast.
 #' @export
 #'
 #' @examples

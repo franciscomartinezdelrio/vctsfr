@@ -1,16 +1,19 @@
-#' Creates a ggplot object with a time series and some forecasts
+#'Creates a ggplot object with a time series and some forecasts
 #'
-#' Create a ggplot object with a time series and, optionally, some future values
-#' of the time series and several forecast for those future values.
+#'Create a `ggplot` object with a time series and, optionally, some future
+#'values of the time series and several forecast for those future values.
 #'
-#' @inheritParams plot_ts
-#' @param predictions NULL (default) or a named list containing the predictions
-#'   for the future values. Each component of the list should contain a vector
-#'   or an object of class \code{ts} representing a forecast, the name of the
-#'   component should be the name of the forecasting method.
+#'If \code{future} or the forecasts in the \code{prediction} list are vectors
+#'then they are supposed to start after the last data of the time series.
 #'
-#' @return The ggplot object representing the time series and its forecast.
-#' @export
+#'@inheritParams plot_ts
+#'@param predictions NULL (default) or a named list containing the predictions
+#'  for the future values. Each component of the list should contain a vector or
+#'  an object of class \code{ts} representing a forecast, the name of the
+#'  component should be the name of the forecasting method.
+#'
+#'@return The `ggplot` object representing the time series and its forecast.
+#'@export
 #'
 #' @examples
 #' # plot a time series, its future values and two forecasts
@@ -18,7 +21,7 @@
 #' f <- window(USAccDeaths, start = c(1978, 1))
 #' prediction1 <- rep(mean(ts), 12)
 #' prediction2 <- as.vector(window(ts, start = c(1977, 1)))
-#' p <- list(mean = prediction1, naive = prediction2)
+#' p <- list(Mean = prediction1, Naive = prediction2)
 #' plot_predictions(ts, future = f, predictions = p)
 plot_predictions <- function(ts, future = NULL, predictions = NULL, sdp = TRUE) {
   # check ts parameter

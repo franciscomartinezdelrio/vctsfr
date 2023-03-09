@@ -40,7 +40,7 @@ level of the prediction interval.}
 \item{sdp}{logical. Should data points be shown? (default value \code{TRUE})}
 }
 \value{
-The ggplot object representing the time series and its forecast.
+The \code{ggplot} object representing the time series and its forecast.
 }
 \description{
 Create a \code{ggplot} object associated with a time series and, optionally, its
@@ -77,7 +77,7 @@ if (require(forecast)) {
   f <- window(USAccDeaths, start = c(1978, 1))
   ets_fit <- ets(timeS)
   p <- forecast(ets_fit, h = length(f), level = 90)
-  plot_ts(timeS, future = f, prediction = p$mean, method = "Mean",
+  plot_ts(timeS, future = f, prediction = p$mean, method = "ES",
           lpi = p$lower, upi = p$upper, level = 90
   )
 }
