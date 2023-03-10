@@ -37,7 +37,6 @@ info <- ts_info(USAccDeaths)
 info2 <- ts_info(ts(rnorm(50)), future = rnorm(10))
 
 # Information about a time series, its future values and a forecast
-
 if (require("forecast")) {
   t <- ts(rnorm(50))
   f <- rnorm(10)

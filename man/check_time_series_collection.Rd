@@ -8,32 +8,21 @@ check_time_series_collection(collection)
 }
 \arguments{
 \item{collection}{a list representing a collection of time series as
-described in \link{plot_collection}.}
+described in \code{\link[=plot_collection]{plot_collection()}}.}
 }
 \value{
 a character string with value \code{"OK"} if the object is properly
 formatted. Otherwise, the character string indicates the first error found
-in the object format.
+in the object's format.
 }
 \description{
 This function checks that an object holding a collection of time series,
 their future values and their forecasts has the correct format. This kind of
-objects are used in function \link{plot_collection}.
+objects are used in function \code{\link[=plot_collection]{plot_collection()}}. A collection of time series
+should be a list compounded of objects of class \code{ts_info}, which are built
+using the \code{\link[=ts_info]{ts_info()}} function.
 }
 \examples{
-c <- list(
-   list(Historical = window(USAccDeaths, end = c(1977, 12)),
-        Future = window(USAccDeaths, start = c(1978, 1)),
-        Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
-                         naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
-        )
-   ),
-   list(Historical = window(UKDriverDeaths, end = c(1983, 12)),
-        Future = window(UKDriverDeaths, start = c(1984, 1)),
-        Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
-                         naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
-        )
-   )
-)
+c <- list(ts_info(USAccDeaths), ts_info(ldeaths))
 check_time_series_collection(c)
 }

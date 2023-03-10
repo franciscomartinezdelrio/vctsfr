@@ -12,7 +12,7 @@
 #'   Future values of the time series.
 #' @param prediction NULL (default) or a time series of class \code{ts} or a
 #'   vector. Forecast of the future values of the time series.
-#' @param method (NULL) (default) a character string with the name of the method
+#' @param method NULL (default) a character string with the name of the method
 #'   used to forecast the future values of the time series. This name will
 #'   appear in the legend.
 #' @param lpi NULL (default) or a time series of class \code{ts} or a vector.
@@ -90,7 +90,7 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = N
 
   # Check level parameter
   if (!is.null(level) && (!is.numeric(level) || length(level) > 1 || level <= 0 || level >= 100))
-     stop("Parameter level should be a scalar number between 0 and 1")
+     stop("Parameter level should be a scalar number in the interval (0, 100)")
   if (is.null(level) && !is.null(lpi))
     stop("If the prediction interval is specified, the level parameter should be specified")
 

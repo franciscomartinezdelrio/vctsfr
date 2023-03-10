@@ -18,22 +18,59 @@
 #'   of the list must have been built with the [ts_info()] function.
 #' @param number an integer. The number of the time series. It should be a value
 #'   between 1 and `length(collection)`.
-#' @param sdp logical. Should data points be shown in the plot? (default value `TRUE`)
+#' @param methods NULL (default) or a character vector indicating the names of
+#'   the forecasting methods to be plotted.
+#' @param level NULL (default) or a number in the interval (0, 100) indicating
+#'   the level of the prediction interval to be shown. This parameter in
+#'   considered only when just one forecasting method is plotted and the
+#'   forecasting method has a prediction interval with the specified level.
+#' @param sdp logical. Should data points be shown in the plot? (default value
+#'   `TRUE`)
 #'
-#' @return The ggplot object representing the time series and its forecast.
+#' @return The `ggplot` object representing the time series and its forecast.
 #' @export
 #'
 #' @seealso [ts_info()] function to see how to build the components of the
 #'   `collection` parameter.
 #' @examples
 #' # create a collection of two time series and plot both time series
-#' c <- list(
-#'           ts_info(USAccDeaths),
-#'           ts_info(ldeaths)
-#' )
+#' c <- list(ts_info(USAccDeaths), ts_info(ldeaths))
 #' plot_collection(c, number = 1)
-#' plot_collection(c, number = 2)
-plot_collection <- function(collection, number, sdp = TRUE) {
+#' plot_collection(c, number = 2, sdp = FALSE)
+#'
+#' # create a collection of one time series with future values and forecasts
+#' if (require(forecast)) {
+#'   c <- vector(2, mode = "list")
+#'   timeS <- window(USAccDeaths, end = c(1977, 12))
+#'   f <- window(USAccDeaths, start = c(1978, 1))
+#'   ets_fit   <- ets(timeS)
+#'   ets_pred  <- forecast(ets_fit, h = length(f), level = 90)
+#'   mean_pred <- meanf(timeS, h = length(f), level = 90)
+#'   c[[1]] <- ts_info(timeS, future = f,
+#'             prediction_info("ES", ets_pred$mean,
+#'                             pi_info(90, ets_pred$lower, ets_pred$upper)),
+#'             prediction_info("Mean", mean_pred$mean,
+#'                             pi_info(90, mean_pred$lower, mean_pred$upper))
+#'   )
+#'   timeS <- ts(rnorm(30, sd = 3))
+#'   f <- rnorm(5, sd = 3)
+#'   rw <- rwf(timeS, h = length(f), level = 80)
+#'   mean <- meanf(timeS, h = length(f), level = 90)
+#'   c[[2]] <- ts_info(timeS, future = f,
+#'             prediction_info("Random Walk", rw$mean,
+#'                             pi_info(80, rw$lower, rw$upper)),
+#'             prediction_info("Mean", mean$mean,
+#'                             pi_info(90, mean$lower, mean$upper))
+#'   )
+#'   plot_collection(c, number = 1)
+#' }
+#' if (require("forecast"))
+#'   plot_collection(c, number = 2)
+#' if (require("forecast"))
+#'   plot_collection(c, number = 2, methods = "Mean") # just plot a forecasting method
+#' if (require("forecast"))
+#'   plot_collection(c, number = 2, methods = "Random Walk", level = 80)
+plot_collection <- function(collection, number, methods = NULL, level = NULL, sdp = TRUE) {
   # check collection parameter
   r <- check_time_series_collection(collection)
   if (r != "OK")
@@ -43,13 +80,64 @@ plot_collection <- function(collection, number, sdp = TRUE) {
   if (! (is.numeric(number) && number >= 1 && number <= length(collection)))
     stop("'number' parameter should be a valid index in collection")
 
+  # Check methods parameter
+  if (! (is.null(methods) || is.character(methods)))
+    stop("methods parameter should be a character vector")
+  if(!is.null(methods) && !("forecasts" %in% names(collection[[number]]))) {
+    m <- paste("methods parameter should contain names of forecasting methods in series number", number)
+    stop(m)
+  }
+  if(!is.null(methods) && ("forecasts" %in% names(collection[[number]]))) {
+    forecasting_names <- sapply(collection[[number]]$forecasts, function(x) x$name)
+    if (!all(methods %in% forecasting_names)){
+      m <- paste("all the names of method parameter should be existing forecasting methods in series number", number)
+      stop(m)
+    }
+  }
+
+  # check level parameter
+  if (!is.null(level) && (!is.numeric(level) || length(level) > 1 || level <= 0 || level >= 100))
+    stop("Parameter level should be a scalar number in the interval (0, 100)")
+  # is there only one forecasting method to plot?
+  only_one_method <- ("forecasts" %in% names(collection[[number]])) &&
+                     ((!is.null(methods) && length(methods) == 1) ||
+                      is.null(methods) && length(collection[[number]]$forecast) == 1)
+  if (!is.null(level) && !only_one_method)
+    stop("level parameter should only be used when plotting just one forecasting method")
+
+  if (!is.null(level) && only_one_method) {
+    position <- if (is.null(methods)) 1 else which(methods == forecasting_names)
+    if (!("pi" %in% names(collection[[number]]$forecasts[[position]]))) {
+        stop("level parameter is used and the forecasting method has no prediction intervals")
+    } else {
+      levels <- sapply(collection[[number]]$forecasts[[position]]$pi, function(p) p$level)
+      if (!(level %in% levels))
+        stop("level parameter is not a valid level in the forecasting method")
+    }
+  }
+
   # check sdp parameter
   if(! is.logical(sdp))
     stop("Parameter sdp should be a logical value")
 
+  if (only_one_method && !is.null(level)) {
+    position <- if (is.null(methods)) 1 else which(methods == forecasting_names)
+    levels <- sapply(collection[[number]]$forecasts[[position]]$pi, function(p) p$level)
+    position2 <- which(level == levels)
+    return(plot_ts(collection[[number]]$historical,
+                   future = collection[[number]]$future,
+                   prediction = collection[[number]]$forecast[[1]]$forecast,
+                   method = collection[[number]]$forecast[[1]]$name,
+                   lpi = collection[[number]]$forecast[[1]]$pi[[position2]]$lpi,
+                   upi = collection[[number]]$forecast[[1]]$pi[[position2]]$upi,
+                   level = level
+    ))
+  }
+
   if ("forecasts" %in% names(collection[[number]])) {
     p <- list()
     for (pred in collection[[number]]$forecasts) {
+      if (!is.null(methods) && !(pred$name %in% methods)) next
       p[[length(p) + 1]] <- pred$forecast
       names(p)[[length(p)]] <- pred$name
     }
@@ -67,31 +155,20 @@ plot_collection <- function(collection, number, sdp = TRUE) {
 #'
 #' This function checks that an object holding a collection of time series,
 #' their future values and their forecasts has the correct format. This kind of
-#' objects are used in function [plot_collection].
+#' objects are used in function [plot_collection()]. A collection of time series
+#' should be a list compounded of objects of class `ts_info`, which are built
+#' using the [ts_info()] function.
 #'
 #' @param collection a list representing a collection of time series as
-#'   described in [plot_collection].
+#'   described in [plot_collection()].
 #'
 #' @return a character string with value `"OK"` if the object is properly
 #'   formatted. Otherwise, the character string indicates the first error found
-#'   in the object format.
+#'   in the object's format.
 #' @export
 #'
 #' @examples
-#' c <- list(
-#'    list(Historical = window(USAccDeaths, end = c(1977, 12)),
-#'         Future = window(USAccDeaths, start = c(1978, 1)),
-#'         Forecasts = list(mean = rep(mean(window(USAccDeaths, end = c(1977, 12))), 12),
-#'                          naive = rep(tail(window(USAccDeaths, end = c(1977, 12)), 1), 12)
-#'         )
-#'    ),
-#'    list(Historical = window(UKDriverDeaths, end = c(1983, 12)),
-#'         Future = window(UKDriverDeaths, start = c(1984, 1)),
-#'         Forecasts = list(mean = rep(mean(window(UKDriverDeaths, end = c(1983, 12))), 12),
-#'                          naive = rep(tail(window(UKDriverDeaths, end = c(1983, 12)), 1), 12)
-#'         )
-#'    )
-#' )
+#' c <- list(ts_info(USAccDeaths), ts_info(ldeaths))
 #' check_time_series_collection(c)
 check_time_series_collection <- function(collection) {
   if (!is.list((collection)))

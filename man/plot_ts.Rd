@@ -24,7 +24,7 @@ Future values of the time series.}
 \item{prediction}{NULL (default) or a time series of class \code{ts} or a
 vector. Forecast of the future values of the time series.}
 
-\item{method}{(NULL) (default) a character string with the name of the method
+\item{method}{NULL (default) a character string with the name of the method
 used to forecast the future values of the time series. This name will
 appear in the legend.}
 

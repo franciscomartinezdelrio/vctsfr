@@ -5,7 +5,7 @@
 \title{Create the associated ggplot object of a time series belonging to a
 collection}
 \usage{
-plot_collection(collection, number, sdp = TRUE)
+plot_collection(collection, number, methods = NULL, level = NULL, sdp = TRUE)
 }
 \arguments{
 \item{collection}{a list with the collection of time series. Each component
@@ -14,10 +14,19 @@ of the list must have been built with the \code{\link[=ts_info]{ts_info()}} func
 \item{number}{an integer. The number of the time series. It should be a value
 between 1 and \code{length(collection)}.}
 
-\item{sdp}{logical. Should data points be shown in the plot? (default value \code{TRUE})}
+\item{methods}{NULL (default) or a character vector indicating the names of
+the forecasting methods to be plotted.}
+
+\item{level}{NULL (default) or a number in the interval (0, 100) indicating
+the level of the prediction interval to be shown. This parameter in
+considered only when just one forecasting method is plotted and the
+forecasting method has a prediction interval with the specified level.}
+
+\item{sdp}{logical. Should data points be shown in the plot? (default value
+\code{TRUE})}
 }
 \value{
-The ggplot object representing the time series and its forecast.
+The \code{ggplot} object representing the time series and its forecast.
 }
 \description{
 Create a \code{ggplot} object associated with a time series belonging to a
@@ -36,12 +45,42 @@ shown.
 }
 \examples{
 # create a collection of two time series and plot both time series
-c <- list(
-          ts_info(USAccDeaths),
-          ts_info(ldeaths)
-)
+c <- list(ts_info(USAccDeaths), ts_info(ldeaths))
 plot_collection(c, number = 1)
-plot_collection(c, number = 2)
+plot_collection(c, number = 2, sdp = FALSE)
+
+# create a collection of one time series with future values and forecasts
+if (require(forecast)) {
+  c <- vector(2, mode = "list")
+  timeS <- window(USAccDeaths, end = c(1977, 12))
+  f <- window(USAccDeaths, start = c(1978, 1))
+  ets_fit   <- ets(timeS)
+  ets_pred  <- forecast(ets_fit, h = length(f), level = 90)
+  mean_pred <- meanf(timeS, h = length(f), level = 90)
+  c[[1]] <- ts_info(timeS, future = f,
+            prediction_info("ES", ets_pred$mean,
+                            pi_info(90, ets_pred$lower, ets_pred$upper)),
+            prediction_info("Mean", mean_pred$mean,
+                            pi_info(90, mean_pred$lower, mean_pred$upper))
+  )
+  timeS <- ts(rnorm(30, sd = 3))
+  f <- rnorm(5, sd = 3)
+  rw <- rwf(timeS, h = length(f), level = 80)
+  mean <- meanf(timeS, h = length(f), level = 90)
+  c[[2]] <- ts_info(timeS, future = f,
+            prediction_info("Random Walk", rw$mean,
+                            pi_info(80, rw$lower, rw$upper)),
+            prediction_info("Mean", mean$mean,
+                            pi_info(90, mean$lower, mean$upper))
+  )
+  plot_collection(c, number = 1)
+}
+if (require("forecast"))
+  plot_collection(c, number = 2)
+if (require("forecast"))
+  plot_collection(c, number = 2, methods = "Mean") # just plot a forecasting method
+if (require("forecast"))
+  plot_collection(c, number = 2, methods = "Random Walk", level = 80)
 }
 \seealso{
 \code{\link[=ts_info]{ts_info()}} function to see how to build the components of the
