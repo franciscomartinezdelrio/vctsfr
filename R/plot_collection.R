@@ -111,7 +111,7 @@ plot_collection <- function(collection, number, methods = NULL, level = NULL, sd
       if (!(level %in% levels)) {
         m <- paste0("level ", level,
                     " is not included in the prediction interval levels of the forecasting method")
-        m <- c(m, paste("\n  current levels:", paste(as.character(levels))))
+        m <- paste0(m, "\n  current levels: ", paste(levels, collapse = " "))
         stop(m)
       }
     }
@@ -122,10 +122,10 @@ plot_collection <- function(collection, number, methods = NULL, level = NULL, sd
     position2 <- which(level == levels)
     return(plot_ts(collection[[number]]$historical,
                    future = collection[[number]]$future,
-                   prediction = collection[[number]]$forecast[[1]]$forecast,
-                   method = collection[[number]]$forecast[[1]]$name,
-                   lpi = collection[[number]]$forecast[[1]]$pi[[position2]]$lpi,
-                   upi = collection[[number]]$forecast[[1]]$pi[[position2]]$upi,
+                   prediction = collection[[number]]$forecast[[position]]$forecast,
+                   method = collection[[number]]$forecast[[position]]$name,
+                   lpi = collection[[number]]$forecast[[position]]$pi[[position2]]$lpi,
+                   upi = collection[[number]]$forecast[[position]]$pi[[position2]]$upi,
                    level = level
     ))
   }
