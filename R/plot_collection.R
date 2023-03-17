@@ -111,8 +111,12 @@ plot_collection <- function(collection, number, methods = NULL, level = NULL, sd
         stop("level parameter is used and the forecasting method has no prediction intervals")
     } else {
       levels <- sapply(collection[[number]]$forecasts[[position]]$pi, function(p) p$level)
-      if (!(level %in% levels))
-        stop("level parameter is not a valid level in the forecasting method")
+      if (!(level %in% levels)) {
+        m <- paste0("level ", level,
+                    " is not included in the prediction interval levels of the forecasting method")
+        m <- c(m, paste("\n  current levels:", paste(as.character(levels))))
+        stop(m)
+      }
     }
   }
 
