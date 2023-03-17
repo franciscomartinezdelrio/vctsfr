@@ -85,4 +85,3 @@ if (require("forecast"))
 \seealso{
 \code{\link[=ts_info]{ts_info()}} function to see how to build the components of the
 \code{collection} parameter.
-}

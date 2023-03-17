@@ -1,6 +1,3 @@
-#' Create the associated ggplot object of a time series belonging to a
-#' collection
-#'
 #' Create a `ggplot` object associated with a time series belonging to a
 #' collection. Apart from the time series, future values and forecasts for the
 #' future values form part of the `ggplot` object.
@@ -119,11 +116,6 @@ plot_collection <- function(collection, number, methods = NULL, level = NULL, sd
       }
     }
   }
-
-  # check sdp parameter
-  if(! is.logical(sdp))
-    stop("Parameter sdp should be a logical value")
-
   if (only_one_method && !is.null(level)) {
     position <- if (is.null(methods)) 1 else which(methods == forecasting_names)
     levels <- sapply(collection[[number]]$forecasts[[position]]$pi, function(p) p$level)
@@ -184,4 +176,3 @@ check_time_series_collection <- function(collection) {
   }
   return("OK")
 }
-
