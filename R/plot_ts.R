@@ -115,6 +115,7 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = N
 
   df <- rbind(df, df_f, df_p, df_upi)
 
+  x <- y <- type <- NULL # to avoid notes
   p <- ggplot2::ggplot(df, ggplot2::aes(x, y))
   p <- p + ggplot2::geom_line(ggplot2::aes(color = type))
   # Lower pi

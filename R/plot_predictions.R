@@ -61,6 +61,7 @@ plot_predictions <- function(ts, future = NULL, predictions = NULL, sdp = TRUE) 
   for (ind in seq_along(predictions))
     df <- rbind(df, add_ts(predictions[[ind]], ts, names(predictions)[ind]))
 
+  x <- y <- type <- NULL # to avoid notes
   p <- ggplot2::ggplot(df, mapping = ggplot2::aes(x, y)) +
     ggplot2::geom_line(ggplot2::aes(color = type))
   if (sdp)
