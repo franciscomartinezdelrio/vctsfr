@@ -1,10 +1,16 @@
 Package: vctsfr
 Title: Visualize Collections of Time series Forecasts in R
 Version: 0.0.0.9000
-Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
+Authors@R: c(
+    person("Maria Pilar", "Frias-Bustamante", email = "mpfrias@ujaen.es",
+            role = c("aut"), comment = c(ORCID = "0000-0001-6886-0953"))
+    person("Francisco", "Martinez", email = "fmartin@ujaen.es",
+           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5206-1898")))
+Description: Tools for visualizing collections of time series and, optionally"
+    their future values, forecasts for their future values and prediction
+    intervals for the forecasts. A web-based GUI can be used to visualize
+    the collection of time series.
+Maintainer: Francisco Martinez <fmartin@ujaen.es>
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
@@ -17,3 +23,5 @@ Imports:
     ggplot2,
     methods,
     shiny
+URL: https://github.com/franciscomartinezdelrio/vctsfr
+BugReports: https://github.com/franciscomartinezdelrio/vctsfr/issues
