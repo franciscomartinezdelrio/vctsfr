@@ -16,6 +16,11 @@ GUI_collection <- function(collection) {
   if (r != "OK")
     stop(paste("Error in 'collection' parameter:", r))
 
+  # accuracy measures
+  am <- list(RMSE = function(fut, fore, historical = NULL) sqrt(mean((fut-fore)^2)),
+             MAPE = function(fut, fore, historical = NULL) mean(abs((fut-fore)/fut))*100
+  )
+
   ui <- shiny::fluidPage(
     shiny::titlePanel("Visualize time series"),
 
@@ -98,17 +103,12 @@ GUI_collection <- function(collection) {
     output$accuracy <- shiny::renderTable({
       pred <- collection[[input$number]]
       if (!is.null(pred$future) && !is.null(input$model)) {
-        # RMSE, root mean squared error
-        RMSE <- compute_error(function(fut, fore) sqrt(mean((fut-fore)^2)),
-                              pred,
-                              input$model
-        )
-        # MAPE, mean absolute percentage error
-        MAPE <- compute_error(function(fut, fore) mean(abs((fut-fore)/fut))*100,
-                              pred,
-                              input$model
-        )
-        d <- data.frame(RMSE, MAPE)
+        d <- NULL
+        for(a_m in am) {
+          d <- cbind(d, compute_error(a_m, pred, input$model))
+        }
+        d <- data.frame(d)
+        colnames(d) <- names(am)
         row.names(d) <- input$model
         d
       }
