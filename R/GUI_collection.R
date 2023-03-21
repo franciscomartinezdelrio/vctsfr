@@ -32,7 +32,10 @@ GUI_collection <- function(collection) {
         shiny::br(),
         shiny::uiOutput("pi")
       ),
-      shiny::mainPanel(shiny::plotOutput("plot"))
+      shiny::mainPanel(shiny::plotOutput("plot"),
+                       shiny::br(),
+                       shiny::uiOutput("accu_message"),
+                       shiny::tableOutput("accuracy"))
     )
   )
 
@@ -40,7 +43,6 @@ GUI_collection <- function(collection) {
     output$models <- shiny::renderUI({
       pred <- collection[[input$number]]
       if ("forecasts" %in% names(pred)) {
-        print(input$model)
         names <- sapply(pred$forecasts, function(f) f$name)
         if (is.null(input$model)) {
           selected <- NULL
@@ -82,9 +84,47 @@ GUI_collection <- function(collection) {
                              sdp = input$sdp
         )
       }
-      p + ggplot2::ggtitle(paste("Time series", collection[[input$number]]$name))
+      p + ggplot2::ggtitle(paste("Time series", collection[[input$number]]$name)) +
+          ggplot2::theme(plot.title = element_text(face = "bold"))
     }, res = 96)
+
+    output$accu_message <- shiny::renderUI({
+      pred <- collection[[input$number]]
+      if (!is.null(pred$future) && !is.null(input$model)) {
+        h4("Forecast accuracy measures")
+      }
+    })
+
+    output$accuracy <- shiny::renderTable({
+      pred <- collection[[input$number]]
+      if (!is.null(pred$future) && !is.null(input$model)) {
+        # RMSE, root mean squared error
+        RMSE <- compute_error(function(fut, fore) sqrt(mean((fut-fore)^2)),
+                              pred,
+                              input$model
+        )
+        # MAPE, mean absolute percentage error
+        MAPE <- compute_error(function(fut, fore) mean(abs((fut-fore)/fut))*100,
+                              pred,
+                              input$model
+        )
+        d <- data.frame(RMSE, MAPE)
+        row.names(d) <- input$model
+        d
+      }
+    }, rownames = TRUE)
   }
   shiny::shinyApp(ui, server)
+}
+
+compute_error <- function(f, information, models) {
+  result <- numeric(length = length(models))
+  for (ind in seq_along(models)) {
+    name <- models[ind]
+    forecasting_names <- sapply(information$forecasts, function(x) x$name)
+    position <- which(name == forecasting_names)
+    result[ind] <- f(information$future, information$forecasts[[position]]$forecast)
+  }
+  result
 }
 
