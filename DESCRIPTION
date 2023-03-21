@@ -23,5 +23,4 @@ Imports:
     ggplot2,
     methods,
     shiny
-URL: https://github.com/franciscomartinezdelrio/vctsfr
-BugReports: https://github.com/franciscomartinezdelrio/vctsfr/issues
+
