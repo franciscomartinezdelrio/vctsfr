@@ -90,13 +90,13 @@ GUI_collection <- function(collection) {
         )
       }
       p + ggplot2::ggtitle(paste("Time series", collection[[input$number]]$name)) +
-          ggplot2::theme(plot.title = element_text(face = "bold"))
+          ggplot2::theme(plot.title = ggplot2::element_text(face = "bold"))
     }, res = 96)
 
     output$accu_message <- shiny::renderUI({
       pred <- collection[[input$number]]
       if (!is.null(pred$future) && !is.null(input$model)) {
-        h4("Forecast accuracy measures")
+        shiny::h4("Forecast accuracy measures")
       }
     })
 
