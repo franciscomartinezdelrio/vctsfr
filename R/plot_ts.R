@@ -137,6 +137,8 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = N
   colours <- c("black", my_colours("blue"), my_colours("red"), "pink")
   names(colours) <- c("Historical", "Future", method, name_PI)
   p <- p + ggplot2::scale_colour_manual(values = colours, breaks = breaks)
+  if (is.null(future) && is.null(prediction))
+    p <- p + ggplot2::guides(colour = "none")
   p
 }
 
