@@ -20,8 +20,8 @@ an object of class \code{pred_info}. A list with the information supplied
 to the function.
 }
 \description{
-The object contains a forecast and, optionally, prediction intervals for the
-forecast.
+The object created contains a forecast and, optionally, prediction intervals
+for the forecast.
 }
 \examples{
 if (require("forecast")) {

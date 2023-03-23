@@ -68,8 +68,8 @@ ts_info <- function(historical, ..., future = NULL, name = NULL) {
 
 #' Create an object with a prediction about the future values of a time series
 #'
-#' The object contains a forecast and, optionally, prediction intervals for the
-#' forecast.
+#' The object created contains a forecast and, optionally, prediction intervals
+#' for the forecast.
 #'
 #' @param name a character indicating the name of the method used to forecast.
 #' @param forecast a time series of class \code{ts} or a vector. It is a
@@ -117,8 +117,8 @@ prediction_info <- function(name, forecast, ...) {
 
 #' Create a prediction interval object
 #'
-#' The object represents a prediction interval for the forecast of the future
-#' values of a time series.
+#' The object created represents a prediction interval for the forecast of the
+#' future values of a time series.
 #'
 #' @param level a number in the interval (0, 100) indicating the level of the
 #'   prediction interval.

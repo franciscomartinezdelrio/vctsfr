@@ -21,8 +21,8 @@ An object of class \code{pi_info}. It is a list containing all the
 information supplied to the function.
 }
 \description{
-The object represents a prediction interval for the forecast of the future
-values of a time series.
+The object created represents a prediction interval for the forecast of the
+future values of a time series.
 }
 \examples{
 if (require("forecast")) {
