@@ -122,12 +122,12 @@ plot_ts <- function(ts, future = NULL, prediction = NULL, method = NULL, lpi = N
   if (!is.null(lpi)) {
     p <- p + ggplot2::geom_line(ggplot2::aes(x, y), data = df_lpi, colour = "pink")
     if (sdp)
-      p <- p + ggplot2::geom_point(ggplot2::aes(x, y), data = df_lpi, colour = "pink", size = 1, alpha = 0.5)
+      p <- p + ggplot2::geom_point(ggplot2::aes(x, y), data = df_lpi, colour = "pink", size = 1, alpha = 0.2)
   }
 
   if (!is.null(upi) && !is.null(lpi)) {
     limits <- data.frame(x = df_upi$x, y = df_p$y, upi = upi, lpi = lpi)
-    p <- p + ggplot2::geom_ribbon(data = limits, ggplot2::aes(x = x, ymax = upi, ymin = lpi), fill = "pink", alpha = 0.5)
+    p <- p + ggplot2::geom_ribbon(data = limits, ggplot2::aes(x = x, ymax = upi, ymin = lpi), fill = "pink", alpha = 0.2)
   }
   if (sdp) {
     p <- p + ggplot2::geom_point(size = 1, ggplot2::aes(color = type))
