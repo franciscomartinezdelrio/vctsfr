@@ -18,7 +18,7 @@ examples section.}
 The future values of the time series (possibly to be forecast).}
 
 \item{name}{NULL (default) or a character string with information about the
-time series.}
+time series. Typically, its name.}
 }
 \value{
 An object of class \code{ts_info}. It is a list containing all the

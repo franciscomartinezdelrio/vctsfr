@@ -12,7 +12,7 @@
 #' @param future NULL (default) or a time series of class \code{ts} or a vector.
 #'   The future values of the time series (possibly to be forecast).
 #' @param name NULL (default) or a character string with information about the
-#'   time series.
+#'   time series. Typically, its name.
 #'
 #' @return An object of class `ts_info`. It is a list containing all the
 #'   information supplied to the function.
