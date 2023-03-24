@@ -1,5 +1,17 @@
 #' Launches the web-based GUI for visualizing time series
 #'
+#' Launches the web-based GUI for visualizing a collection of time series in a
+#' web browser.
+#'
+#' The **vctsfr** package provides a Shiny-based GUI to visualize collections of
+#' time series and their forecasts. The main features of the GUI are:
+#'
+#' * It allows you to easily navigate through the different series.
+#' * You can select which forecasting methods are displayed.
+#' * In the case you display a single forecasting method with associated
+#' prediction intervals, you can select the prediction interval to display.
+#' * Forecasting accuracy measures are displayed.
+#'
 #' @inheritParams plot_collection
 #'
 #' @return Nothing
@@ -18,7 +30,10 @@ GUI_collection <- function(collection) {
 
   # accuracy measures
   am <- list(RMSE = function(fut, fore, historical = NULL) sqrt(mean((fut-fore)^2)),
-             MAPE = function(fut, fore, historical = NULL) mean(abs((fut-fore)/fut))*100
+             MAPE = function(fut, fore, historical = NULL) mean(abs((fut-fore)/fut))*100,
+             MAE = function(fut, fore, historical = NULL) mean(abs(fut-fore)),
+             ME = function(fut, fore, historical = NULL) mean(fut-fore),
+             MPE = function(fut, fore, historical = NULL) mean((fut-fore)/fut)*100
   )
 
   ui <- shiny::fluidPage(

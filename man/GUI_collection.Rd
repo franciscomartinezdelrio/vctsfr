@@ -14,7 +14,19 @@ of the list must have been built with the \code{\link[=ts_info]{ts_info()}} func
 Nothing
 }
 \description{
-Launches the web-based GUI for visualizing time series
+Launches the web-based GUI for visualizing a collection of time series in a
+web browser.
+}
+\details{
+The \strong{vctsfr} package provides a Shiny-based GUI to visualize collections of
+time series and their forecasts. The main features of the GUI are:
+\itemize{
+\item It allows you to easily navigate through the different series.
+\item You can select which forecasting methods are displayed.
+\item In the case you display a single forecasting method with associated
+prediction intervals, you can select the prediction interval to display.
+\item Forecasting accuracy measures are displayed.
+}
 }
 \examples{
 # create a collection of two time series and visualize them
