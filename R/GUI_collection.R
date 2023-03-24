@@ -96,7 +96,7 @@ GUI_collection <- function(collection) {
     output$accu_message <- shiny::renderUI({
       pred <- collection[[input$number]]
       if (!is.null(pred$future) && !is.null(input$model)) {
-        shiny::h4("Forecast accuracy measures")
+        shiny::h4(shiny::strong("Forecast accuracy measures"))
       }
     })
 

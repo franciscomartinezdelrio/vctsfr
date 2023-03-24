@@ -17,6 +17,9 @@ Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
 Suggests: 
     forecast,
+    knitr,
+    Mcomp,
+    rmarkdown,
     testthat (>= 3.0.0)
 Config/testthat/edition: 3
 Imports: 
@@ -25,3 +28,4 @@ Imports:
     shiny
 URL: https://github.com/franciscomartinezdelrio/vctsfr
 BugReports: https://github.com/franciscomartinezdelrio/vctsfr/issues
+VignetteBuilder: knitr
