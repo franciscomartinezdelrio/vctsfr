@@ -3,8 +3,7 @@
 \name{plot_collection}
 \alias{plot_collection}
 \title{Create a \code{ggplot} object associated with a time series belonging to a
-collection. Apart from the time series, future values and forecasts for the
-future values form part of the \code{ggplot} object.}
+collection.}
 \usage{
 plot_collection(collection, number, methods = NULL, level = NULL, sdp = TRUE)
 }
@@ -30,12 +29,15 @@ forecasting method has a prediction interval with the specified level.}
 The \code{ggplot} object representing the time series and its forecast.
 }
 \description{
+Apart from the time series, future values and forecasts for the
+future values form part of the \code{ggplot} object.
+}
+\details{
 The \code{collection} parameter must be a list. Each component of the list stores
 a time series and, optionally, its future values, forecasts for the future
 values and prediction intervals for the forecasts. Each component should have
 been created using the \code{\link[=ts_info]{ts_info()}} function.
-}
-\details{
+
 In the example section you can see an example of a collection of time series.
 If the \code{collection} parameter is not specified correctly, a proper message is
 shown.

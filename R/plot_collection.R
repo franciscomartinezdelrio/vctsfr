@@ -1,5 +1,7 @@
 #' Create a `ggplot` object associated with a time series belonging to a
-#' collection. Apart from the time series, future values and forecasts for the
+#' collection.
+#'
+#' Apart from the time series, future values and forecasts for the
 #' future values form part of the `ggplot` object.
 #'
 #' The `collection` parameter must be a list. Each component of the list stores
@@ -16,7 +18,7 @@
 #' @param number an integer. The number of the time series. It should be a value
 #'   between 1 and `length(collection)`.
 #' @param methods NULL (default) or a character vector indicating the names of
-#'   the forecasting methods to be plotted.
+#'   the forecasting methods to be displayed.
 #' @param level NULL (default) or a number in the interval (0, 100) indicating
 #'   the level of the prediction interval to be shown. This parameter in
 #'   considered only when just one forecasting method is plotted and the
