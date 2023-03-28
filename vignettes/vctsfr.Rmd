@@ -16,7 +16,9 @@ knitr::opts_chunk$set(
 )
 ```
 
-The **vctsfr** package makes easy the visualization of collections of time series and, optionally, their future values and forecasts for those future values. The forecasts can include prediction intervals. This package is particularly useful when you have forecasts (maybe from different models) for several time series and you want to visualize them in order to compare their results.
+In this document we present the **vctsfr** package, which can be an useful tool for those involved in time series forecasting because it allows you to visually compare the forecasts of several models. The **vctsfr** package is especially convenient when you want to visually compare the predictions of several forecasting methods across a collection of time series.
+
+The **vctsfr** package makes easy the visualization of collections of time series and, optionally, their future values and forecasts for those future values. The forecasts can include prediction intervals. This package is particularly useful when you have forecasts (maybe from different models) for several time series and you want to display them in order to compare their results.
 
 This package arises from a need of her authors. Frequently, we used several forecasting methods to predict the future values of collections of time series (typically belonging to time series competitions). The usual way of comparing the performance of the forecasting methods is to compute a global measure of forecast accuracy for every method based on all its forecasts for all the series of the competition. However, we miss a way of visually compare the performance of different methods over a particular series. This package fills this gap.
 
@@ -24,7 +26,7 @@ This package also facilitates the visualization of just a collection of time ser
 
 ## Visualizing a single time series
 
-If you only want to visualize a single time series and, optionally, information about its future values and/or one forecast for its future values you can use the `plot_ts()` function. Let us see how it works.
+If you only want to display a single time series and, optionally, information about its future values and/or a forecast for its future values you can use the `plot_ts()` function. Let us see how it works.
 
 ```{r}
 library(vctsfr)
@@ -61,7 +63,7 @@ plot_ts(USAccDeaths,
 )
 ```
 
-Finally, you can also show the actual values that are forecast:
+Finally, the actual values that are predicted can also be displayed:
 
 ```{r}
 timeS <- window(USAccDeaths, end = c(1977, 12))
@@ -84,7 +86,7 @@ In all the functions of the **vctsfr** package the time series parameter, i.e. t
 
 ## Visualizing several forecasts
 
-When you want to compare several forecasts for the future values of a time series you can use the function `plot_predictions()`. The forecasts are passed to the function as a list, each component of the list is a forecast and the name of the component is the name of the forecasting method. Let us see an example in which, given a time series, the forecasts of its future values, using the ARIMA and exponential smoothing models implemented in the **forecast** package, are shown:
+When you want to compare several forecasts for the future values of a time series you can use the function `plot_predictions()`. The forecasts are passed to the function as a list, each component of the list is a forecast and the name of the component is the name of the forecasting method. Let us see an example in which, given a time series, the forecasts for its future values, using the ARIMA and exponential smoothing models implemented in the **forecast** package, are displayed:
 
 ```{r}
 timeS <- window(USAccDeaths, end = c(1977, 12)) # historical values
@@ -98,11 +100,11 @@ plot_predictions(timeS, future = fut,
 )
 ```
 
-Looking at the plot it is clear that both models produce similar and fairly accurate predictions.
+Looking at the plot, it is clear that both models produce similar and fairly accurate predictions.
 
 ## Creating collections of time series
 
-In the previous sections we have seen how to plot a time series and forecasts for its future values. However, the main goal of the **vctsfr** package is to facilitate the visualization of collections of time series so that you can visually compare forecasts for their future values.
+In the previous sections we have seen how to display a time series and forecasts for its future values. However, the main goal of the **vctsfr** package is to facilitate the visualization of collections of time series so that you can visually compare forecasts for their future values.
 
 In this section we study how to build these collections. 
 For this purpose, the **vctsfr** package provides three functions:
@@ -111,13 +113,13 @@ For this purpose, the **vctsfr** package provides three functions:
 * `prediction_info()` allows you to create an object with information about a forecast.
 * `pi_info()` allows you to create an object with information about the prediction interval associated with a forecast.
 
-A time series collection is a list of objects created (returned by) the `ts_info()` function. Let's first create a collection storing the historical values of two time series:
+A collection of time series is a list of objects created (returned by) with the `ts_info()` function. Let's first create a collection storing the historical values of two time series:
 
 ```{r}
 collection1 <- list(ts_info(USAccDeaths), ts_info(UKDriverDeaths))
 ```
 
-In the next section we will use the collections built in this section to visualize their information. Next, we use the datasets in the **Mcomp** package to create another collection of series. The **Mcomp** package contains datasets of forecasting competitions. We are going to create a collection of 18 quarterly time series, with their next 12 future values and forecasts for their future values (using the previously applied `ets()` function of the **forecast** package).
+In the next section we will use the collections built in this section to visualize their information. Next, we use a dataset included in the **Mcomp** package to create another collection of series. The **Mcomp** package contains datasets of forecasting competitions. We are going to create a collection of 18 quarterly time series, with their associated next 12 future values and forecasts for their future values (using the previously applied `ets()` function of the **forecast** package).
 
 ```{r}
 library(Mcomp)
@@ -141,7 +143,7 @@ for (ind in seq_along(M1_quarterly)) {
 }
 ```
 
-Finally, we use the same dataset of 18 time series to create a collection of time series, with two forecasts for each series and some prediction intervals for each forecast.
+Finally, we use the same dataset of 18 time series to create a collection of time series, with two forecasts for each series and some prediction intervals associated with each forecast.
 
 ```{r}
 collection3 <- vector("list", length = length(M1_quarterly))
@@ -178,7 +180,7 @@ for (ind in seq_along(M1_quarterly)) {
 }
 ```
 
-It can be noted that the exponential smoothing forecasts have a prediction interval, while the ARIMA forecasts have two prediction intervals. Although not shown in these examples, different time series in a collection can include forecasts done with different models.
+It can be noted that the exponential smoothing forecasts have a prediction interval, while the ARIMA forecasts have two prediction intervals. Although it does not happen in these examples, different time series in a collection can include forecasts done with different models.
 
 ## Visualizing a time series from a collection
 
@@ -188,16 +190,41 @@ Once you have created a collection, you can see the information about one of its
 plot_collection(collection3, number = 3)
 ```
 
-`plot_collection()` has displayed all available information about the series, except for the prediction intervals. You can choose to display a subset of the forecasting methods stored for a time series providing a vector with their names:
+`plot_collection()` has displayed all available information about the series, except for the prediction intervals. You can choose to display a subset of the forecasts associated with a time series providing a vector with the names of the forecasting methods:
 
 ```{r}
 plot_collection(collection3, number = 3, methods = "ets")
 ```
 
-Finally, if you want to display only one forecasting method and this method has associated prediction intervals, you can display one of them providing its level:
+Finally, if you display only the forecasts of one forecasting method and this method has prediction intervals, you can display one of its prediction intervals providing its level:
 
 ```{r}
 plot_collection(collection3, number = 3, methods = "arima", level = 90)
 ```
 
+## The web-based GUI for visualizing collections of time series
 
+Although `plot_collection()` is handy, the best way of navigating through the different series of a collection is to use the `GUI_collection()` function, which launches a Shiny GUI in a web browser.
+
+```{r, eval=FALSE}
+GUI_collection(collection3)
+```
+
+This is how the GUI looks like:
+
+![The vctsfr GUI](gui.png){width="90%"}
+
+Using the GUI the user can select:
+
+* Which time series to display.
+* If the data points are highlighted.
+* Which forecasting methods to display.
+* In the case that only one forecast is displayed and this forecast has prediction intervals, which prediction interval to show.
+
+Apart from the time series, the GUI shows information about the forecast accuracy of the displayed forecasting methods. Currently, for each forecasting method the following forecasting accuracy measures are computed:
+
+* RMSE: root mean squared error
+* MAPE: mean absolute percentage error
+* MAE: mean absolute error
+* ME: mean error
+* MPE: mean percentage error

@@ -1,5 +1,5 @@
 Package: vctsfr
-Title: Visualize Collections of Time series Forecasts in R
+Title: Visualizing Collections of Time series Forecasts in R
 Version: 0.0.0.9000
 Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", email = "mpfrias@ujaen.es",
