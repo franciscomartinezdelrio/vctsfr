@@ -1,11 +1,12 @@
 Package: vctsfr
 Title: Visualizing Collections of Time series Forecasts in R
-Version: 0.0.0.9000
+Version: 0.1.0
 Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", email = "mpfrias@ujaen.es",
             role = c("aut"), comment = c(ORCID = "0000-0001-6886-0953")),
     person("Francisco", "Martinez", email = "fmartin@ujaen.es",
-           role = c("aut", "cre"), comment = c(ORCID = "0000-0002-5206-1898")))
+           role = c("aut", "cre", "cph"), 
+           comment = c(ORCID = "0000-0002-5206-1898")))
 Description: Tools for visualizing collections of time series and, optionally"
     their future values, forecasts for their future values and prediction
     intervals for the forecasts. A web-based GUI can be used to visualize
