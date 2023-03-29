@@ -1,5 +1,5 @@
 Package: vctsfr
-Title: Visualizing Collections of Time series Forecasts in R
+Title: Visualizing Collections of Time Series Forecasts in R
 Version: 0.1.0
 Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", email = "mpfrias@ujaen.es",
@@ -7,10 +7,10 @@ Authors@R: c(
     person("Francisco", "Martinez", email = "fmartin@ujaen.es",
            role = c("aut", "cre", "cph"), 
            comment = c(ORCID = "0000-0002-5206-1898")))
-Description: Tools for visualizing collections of time series and, optionally"
+Description: Tools for visualizing collections of time series and, optionally
     their future values, forecasts for their future values and prediction
-    intervals for the forecasts. A web-based GUI can be used to visualize
-    the collection of time series.
+    intervals for the forecasts. A web-based GUI can be used to display the
+    information in a collection of time series.
 Maintainer: Francisco Martinez <fmartin@ujaen.es>
 License: MIT + file LICENSE
 Encoding: UTF-8

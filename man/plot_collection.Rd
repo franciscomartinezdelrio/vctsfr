@@ -15,7 +15,7 @@ of the list must have been built with the \code{\link[=ts_info]{ts_info()}} func
 between 1 and \code{length(collection)}.}
 
 \item{methods}{NULL (default) or a character vector indicating the names of
-the forecasting methods to be plotted.}
+the forecasting methods to be displayed.}
 
 \item{level}{NULL (default) or a number in the interval (0, 100) indicating
 the level of the prediction interval to be shown. This parameter in
