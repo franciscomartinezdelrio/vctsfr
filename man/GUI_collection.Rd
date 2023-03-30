@@ -29,9 +29,9 @@ prediction intervals, you can select the prediction interval to display.
 }
 }
 \examples{
+\dontshow{if (interactive()) (if (getRversion() >= "3.4") withAutoprint else force)(\{ # examplesIf}
 # create a collection of two time series and visualize them
 c <- list(ts_info(USAccDeaths), ts_info(ldeaths))
-\dontrun{
 GUI_collection(c)
-}
+\dontshow{\}) # examplesIf}
 }

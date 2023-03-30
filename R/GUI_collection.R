@@ -17,12 +17,10 @@
 #' @return Nothing
 #' @export
 #'
-#' @examples
+#' @examplesIf interactive()
 #' # create a collection of two time series and visualize them
 #' c <- list(ts_info(USAccDeaths), ts_info(ldeaths))
-#' \dontrun{
 #' GUI_collection(c)
-#' }
 GUI_collection <- function(collection) {
   r <- check_time_series_collection(collection)
   if (r != "OK")
