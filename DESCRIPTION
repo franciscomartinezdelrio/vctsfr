@@ -1,6 +1,6 @@
 Package: vctsfr
 Title: Visualizing Collections of Time Series Forecasts
-Version: 0.1.0
+Version: 0.1.0.9000
 Authors@R: c(
     person("Maria Pilar", "Frias-Bustamante", email = "mpfrias@ujaen.es",
             role = c("aut"), comment = c(ORCID = "0000-0001-6886-0953")),

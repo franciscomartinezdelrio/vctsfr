@@ -15,19 +15,18 @@ facilitate this comparison.
 
 ## Installation
 
-You can install the development version of vctsfr from
-[GitHub](https://github.com/) with:
+The package can be intalled from CRAN with:
+
+``` r
+install.packages("vctsfr")
+```
+
+For installing the development version of vctsfr from
+[GitHub](https://github.com/):
 
 ``` r
 # install.packages("devtools")
 devtools::install_github("franciscomartinezdelrio/vctsfr")
-```
-
-If the package is accepted in CRAN you will be able to install it from
-CRAN with:
-
-``` r
-install.packages("vctsfr")
 ```
 
 ## Example
