@@ -31,7 +31,12 @@ GUI_collection <- function(collection) {
              MAPE = function(fut, fore, historical = NULL) mean(abs((fut-fore)/fut))*100,
              MAE = function(fut, fore, historical = NULL) mean(abs(fut-fore)),
              ME = function(fut, fore, historical = NULL) mean(fut-fore),
-             MPE = function(fut, fore, historical = NULL) mean((fut-fore)/fut)*100
+             MPE = function(fut, fore, historical = NULL) mean((fut-fore)/fut)*100,
+             sMAPE = function(fut, fore, historical = NULL) mean(200*abs(fore-fut)/(abs(fore)+abs(fut))),
+             MASE = function(fut, fore, historical = NULL) {
+               f <- frequency(historical)
+               mean(abs(fore-fut)) / mean(abs(diff(historical, lag = f)))
+             }
   )
 
   ui <- shiny::fluidPage(
@@ -136,7 +141,8 @@ compute_error <- function(f, information, models) {
     name <- models[ind]
     forecasting_names <- sapply(information$forecasts, function(x) x$name)
     position <- which(name == forecasting_names)
-    result[ind] <- f(information$future, information$forecasts[[position]]$forecast)
+    result[ind] <- f(information$future, information$forecasts[[position]]$forecast,
+                     information$historical)
   }
   result
 }
