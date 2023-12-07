@@ -1,22 +1,10 @@
-## Resubmission:
-
-This is a resubmission. In this version I have:
-
-* Omitted the redundant *in R* from the title
-* Changed the way the description field starts
-* Removed the \donrunt{} in the examples of GUI_collection function
-
-We have not included references in de description field because our package
-is a tool not described anywhere.
-
 ## Test environments
-* local Windows install, R 4.2.3
-* Windows development version 
-* Windows Server 2022, R-devel, 64 bit 
-* MacOS
+* local Windows install, R 4.3.2
+* Windows Server devel, 32/64 bit
+* Some linux flavors
 
 ## R CMD check results
+There were no ERRORs, WARNINGs or NOTEs.
 
-0 errors | 0 warnings | 1 note
-
-* This is a new release so 1 note is expected.
+## Downstream dependencies
+The changes made to this package have no effect in downstream dependencies.
