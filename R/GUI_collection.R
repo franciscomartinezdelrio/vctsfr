@@ -34,7 +34,7 @@ GUI_collection <- function(collection) {
              MPE = function(fut, fore, historical = NULL) mean((fut-fore)/fut)*100,
              sMAPE = function(fut, fore, historical = NULL) mean(200*abs(fore-fut)/(abs(fore)+abs(fut))),
              MASE = function(fut, fore, historical = NULL) {
-               f <- frequency(historical)
+               f <- stats::frequency(historical)
                mean(abs(fore-fut)) / mean(abs(diff(historical, lag = f)))
              }
   )
