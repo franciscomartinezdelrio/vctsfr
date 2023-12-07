@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 In this document we present the **vctsfr** package, which can be an useful tool for those involved in time series forecasting because it allows you to visually compare the predictions of several forecasting models. The **vctsfr** package is especially convenient when you want to visually compare the predictions of several forecasting methods across a collection of time series.
 
-The **vctsfr** package makes easy the visualization of collections of time series and, optionally, their future values and forecasts for those future values. The forecasts can include prediction intervals. This package is particularly useful when you have forecasts (maybe from different models) for several time series and you want to display them in order to compare their results.
+The **vctsfr** package makes it easy the visualization of collections of time series and, optionally, their future values and forecasts for those future values. The forecasts can include prediction intervals. This package is particularly useful when you have forecasts (maybe from different models) for several time series and you want to display them in order to compare their results.
 
 This package arises from a need of her authors. Frequently, we used several forecasting methods to predict the future values of collections of time series (typically belonging to time series competitions). The usual way of comparing the performance of the forecasting methods is to compute a global measure of forecast accuracy for every method based on all its forecasts for all the series of the competition. However, we miss a way of visually compare the performance of different methods over a particular series. This package fills this gap.
 
